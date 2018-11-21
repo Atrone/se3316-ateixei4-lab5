@@ -1,0 +1,8 @@
+{
+    "/api": {
+        "target": "https://se3316-ateixei4-lab5-atrone.c9users.io:8081",
+        "secure": false,
+        "changeOrigin": true,
+        "logLevel": "info"
+    }
+}
