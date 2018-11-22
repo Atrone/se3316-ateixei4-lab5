@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 @Injectable({
   providedIn: 'root'
 })
-export class GetService {
+export class PutService {
 
 constructor(private http: HttpClient) { }
   
@@ -12,10 +12,9 @@ constructor(private http: HttpClient) { }
   * This function receives a callback funtion to send back the aynchronous response from the server.
   */
   getData(callback_fun) {
-      this.http.get('/api/items').subscribe(data => {
-          console.log(data[1]['name']);
-          callback_fun(data);
+      this.http.get('/api').subscribe(data => {
+          console.log(data);
+          callback_fun(data['message']);
       });
   }
-  
 }

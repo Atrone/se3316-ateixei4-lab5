@@ -27,7 +27,33 @@ export class GetComponent implements OnInit {
    * Therefore a callback function is required to get back the response.
    */
   onResponse(res: string) {
-    this.response = res;
+    //this.response = "<li>" + res[1]['name'] + "</li>";
+    for(var i = 0; i < res.length; i++)
+    {
+      if(document.getElementById(i) != null)
+      {
+        this.removeElement(i.toString());
+      }
+    }
+    for(var i = 0; i < res.length; i++)
+    {
+      this.createElement("LI",i.toString(),res[i]['name'] + "," + res[i]['price'] + "," + res[i]['tax'] + "," + res[i]['quantity']);
+    }
+  }
+  
+  createElement(element,elementId,html)
+  {
+    let x = document.createElement(element);
+    let y = document.createTextNode(html);
+    x.setAttribute('id', elementId);
+    x.appendChild(y);
+    document.body.appendChild(x);
+  }
+  // removes an element
+  removeElement(elementId) {
+    // Removes an element from the document
+    var element = document.getElementById(elementId);
+    element.parentNode.removeChild(element);
   }
 
 }
