@@ -30,7 +30,7 @@ export class GetComponent implements OnInit {
     //this.response = "<li>" + res[1]['name'] + "</li>";
     for(var i = 0; i < res.length; i++)
     {
-      if(document.getElementById(i) != null)
+      if(document.getElementById(i.toString()) != null)
       {
         this.removeElement(i.toString());
       }

@@ -17,5 +17,4 @@ constructor(private http: HttpClient) { }
           callback_fun(data);
       });
   }
-  
 }

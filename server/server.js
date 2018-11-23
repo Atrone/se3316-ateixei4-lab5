@@ -78,7 +78,7 @@ router.route('/items')
         Item.find(function(err, items) {
             if (err)
                 res.send(err);
-            console.log(items);
+            console.log(items)
             res.json(items);
         });
     }
