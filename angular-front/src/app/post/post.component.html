@@ -1,7 +1,7 @@
-<form action="/api/items" method="POST">
-<input type="text" placeholder="name" name="name">
-<input type="text" placeholder="price" name="price">
-<input type="text" placeholder="tax" name="tax">
-<input type="text" placeholder="quantity" name="quantity">
-<button type="submit">Submit</button>
-</form>
+<h4>Add new fruit:</h4>
+<p>Name: <input type='text' id='name'></p>
+<p>Price: <input type='number' id='price'></p>
+<p>Tax: <input type='number' id='tax'></p>
+<p>Quantity: <input type='number' id='quantity'></p>
+<button (click)="postFruit(name,price,tax,quantity)">Post</button>
+<script type='text/typescript' src='post.component.ts'> </script>

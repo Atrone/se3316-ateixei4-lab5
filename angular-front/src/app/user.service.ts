@@ -9,38 +9,42 @@ import {auth} from 'firebase';
   providedIn: 'root'
 })
 export class UserService {
+    signingIn = true;
     uid = this.afAuth.authState.pipe(
       map(authState => 
       {
+        var x = document.getElementById("myDIV");
         if(!authState){
+        x.style.display = "block";
         return null;
       }
       else
       {
+        x.style.display = "none";
         return authState.uid;
       }
       
       }),
     );
-    isRegistered = this.uid.pipe(
-      switchMap(uid =>{
-        if(!uid)
-        {
-          return observableOf(false);
-        }
-        else
-        {
-          return this.db.object('/registered/'+uid).valueChanges();
-        }
-      })
-      );
   constructor(private afAuth: AngularFireAuth, private db: AngularFireDatabase) { }
   login()
   {
     this.afAuth.auth.signInWithPopup(new auth.GoogleAuthProvider());
+    var x = document.getElementById("myDIV");
+    if (x.style.display === "none") {
+        x.style.display = "block";
+    } else {
+        x.style.display = "none";
+    }
   }
   logout()
   {
     this.afAuth.auth.signOut();
+    var x = document.getElementById("myDIV");
+    if (x.style.display === "none") {
+        x.style.display = "block";
+    } else {
+        x.style.display = "none";
+    }
   }
 }

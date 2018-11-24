@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {UserService} from './user.service';
+import { AuthService } from './auth.service';
 
 @Component({
   selector: 'app-root',
@@ -8,7 +8,27 @@ import {UserService} from './user.service';
 })
 export class AppComponent {
   title = 'angular-demo1';
-  constructor(public user:UserService){
-    
+  
+  constructor(public authService: AuthService) {}
+  
+  signup(email: string, password: string) {
+    console.log(email)
+    console.log(password);
+    this.authService.signup(email, password);
+    email = password = '';
   }
+
+  login(email: string, password: string) {
+    this.authService.login(email, password);
+    email = password = '';    
+  }
+  
+  resend(){
+    this.authService.sendEmailVerification();
+  }
+
+  logout() {
+    this.authService.logout();
+  }
+
 }
