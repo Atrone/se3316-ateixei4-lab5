@@ -19,6 +19,7 @@ export class PostComponent implements OnInit {
       price : (<HTMLInputElement>document.getElementById('price')).value,
       tax : (<HTMLInputElement>document.getElementById('tax')).value,
       quantity : (<HTMLInputElement>document.getElementById('quantity')).value,
+      rating : (<HTMLInputElement>document.getElementById('rating')).value,
     }
     this.postService.postData(data).subscribe((response)=>{
       console.log(response);

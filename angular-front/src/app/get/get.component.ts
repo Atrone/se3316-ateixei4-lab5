@@ -18,7 +18,7 @@ export class GetComponent implements OnInit {
   
   onClick() {
     // Call the service method, passing the onResponse as the callback
-    // binding 'this' is required to avoid "this is undefined error"
+    // binding 'this' is required to avoid "this is undefined error" 
     this._getservice.getData(this.onResponse.bind(this));
   }
   

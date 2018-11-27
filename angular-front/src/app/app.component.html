@@ -1,18 +1,19 @@
 <!--Local Login & Sign up.-->
 <h1 *ngIf="(authService.user | async)?.emailVerified">Welcome {{ (authService.user | async)?.email }}!</h1>
 <div *ngIf="!(authService.user | async)">
-  <input type="text" [(ngModel)]="email" placeholder="email">
-  <input type="password" [(ngModel)]="password" placeholder="password">
+  <input type="text" [(ngModel)]="email" placeholder="Please enter an email">
+  <input type="password" [(ngModel)]="password" placeholder="Please enter a password">
   <button (click)="signup(email, password)">
     Signup
   </button>
   <button (click)="login(email, password)" [disabled]="!email || !password">
     Login
   </button> 
-  <div *ngIf = "(authService.NACError)">This account either already exists or is badly formatted.</div>
-  <div *ngIf = "(authService.AAError)">Wrong email/password.</div>
+  <div *ngIf = "(authService.NACError)">This account either already exists or is not a valid email address. Please enter a non-existing, valid email.</div>
+  <div *ngIf = "(authService.AAError)">Wrong/invalid email/password.</div>
+  <div *ngIf = "(authService.DError)">Your account has been deactivated, please contact the store manager.</div>
 </div>
-<h2 *ngIf="(authService.user | async) && !((authService.user | async)?.emailVerified)">Please Verify Your Email (click on the link and then refresh to commit the changes)</h2>
+<h3 *ngIf="(authService.user | async) && !((authService.user | async)?.emailVerified)">Please Verify Your Email (click on the link and then refresh to commit the changes)</h3>
 <!--Local Logout-->
 <button (click)="logout()" *ngIf="authService.user | async">
   Logout
@@ -28,12 +29,12 @@
   <h1>
     Welcome to {{ title }}!
   </h1>
-  <img width="300" alt="Angular Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
+  <h4>About us: We offer not just the greatest fruit, but also the greatest online shopping experience.</h4>
 </div>
 <div class="container">
 </div>
-<app-get></app-get>
-<div *ngIf="authService.user | async">
-  <app-post></app-post>
-</div>
+<app-items></app-items>
+<div *ngIf="(authService.user | async) && ((authService.user | async)?.emailVerified)">
+<app-cart></app-cart>
+</div> 
 <router-outlet></router-outlet>

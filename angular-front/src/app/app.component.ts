@@ -7,20 +7,29 @@ import { AuthService } from './auth.service';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'angular-demo1';
-  
+  title = 'The Fruitiest Of Fruit Shelves';
+  emailH : string;
+  passwordH : string;
   constructor(public authService: AuthService) {}
   
   signup(email: string, password: string) {
-    console.log(email)
+    console.log(email);
     console.log(password);
+    this.emailH = email;
+    this.passwordH = password;
     this.authService.signup(email, password);
     email = password = '';
+    console.log(this.emailH);
+    console.log(this.passwordH);
   }
 
   login(email: string, password: string) {
+    this.emailH = email;
+    this.passwordH = password;
     this.authService.login(email, password);
-    email = password = '';    
+    email = password = '';   
+    console.log(this.emailH);
+    console.log(this.passwordH);
   }
   
   resend(){
@@ -30,5 +39,6 @@ export class AppComponent {
   logout() {
     this.authService.logout();
   }
+  
 
 }

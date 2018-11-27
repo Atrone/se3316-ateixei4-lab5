@@ -10,15 +10,19 @@ import { GetComponent } from './get/get.component';
 import { PostComponent } from './post/post.component';
 import { AuthService } from './auth.service';
 import { FormsModule } from '@angular/forms';
-import { AuthComponent } from './auth/auth.component';
+import { ItemsComponent } from './items/items.component';
+import { CartComponent } from './cart/cart.component';
+import { DeleteComponent } from './delete/delete.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     GetComponent,
     PostComponent,
-    AuthComponent
-  ],
+    ItemsComponent,
+    CartComponent,
+    DeleteComponent
+    ],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -28,7 +32,7 @@ import { AuthComponent } from './auth/auth.component';
     apiKey: "AIzaSyCHLnn1Jf-OC-NJGyPSXJy0MXBbIzkQJjU",
     authDomain: "se3316-ateixei4-lab5.firebaseapp.com",
     databaseURL: "https://se3316-ateixei4-lab5.firebaseio.com",
-    projectId: "se3316-ateixei4-lab5",
+    projectId: "se3316-ateixei4-lab5", 
     storageBucket: "se3316-ateixei4-lab5.appspot.com",
     messagingSenderId: "255688483985"
   }),

@@ -9,7 +9,8 @@ import { Observable } from 'rxjs';
 export class AuthService {
   user: Observable<firebase.User>;
   NACError:boolean = false;
-  AAError:boolean = false;
+  AAError:boolean = false
+  DError:boolean = false;
   constructor(private firebaseAuth: AngularFireAuth) {
     this.user = firebaseAuth.authState;
   }
@@ -27,18 +28,18 @@ export class AuthService {
       .auth
       .createUserWithEmailAndPassword(email, password)
       .then(value => {
-        console.log('Success!', value);
+        console.log('Success!', value)
         firebase.auth().currentUser.sendEmailVerification().then(function(){
         console.log("Check your email");
         this.NACError = false;
         }).catch(function(error){
         });
-        });
-        .catch(err => {
+        }).catch(err => {
           this.AAError = false;
+          this.DError = false;
           this.NACError = true;
-          console.log(err.message);
-        console.log('Something went wrong:',err.message);
+          console.log(this.NACError);
+          console.log('Something went wrong:',err.message);
       });
   }
 
@@ -52,8 +53,19 @@ export class AuthService {
         console.log(firebase.auth().currentUser.emailVerified);
       })
       .catch(err => {
-        this.NACError = false;
-        this.AAError = true;
+        if(err.message == "The user account has been disabled by an administrator.")
+        {
+          console.log(err.message);
+          this.DError = true;
+          this.NACError = false;
+          this.AAError = false;
+        }
+        else
+        {
+          this.NACError = false;
+          this.DError = false;
+          this.AAError = true;
+        }
         console.log('Something went wrong:',err.message);
       });
   }

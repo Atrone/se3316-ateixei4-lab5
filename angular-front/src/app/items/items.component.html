@@ -1,0 +1,51 @@
+<h1>Fruit Shelf</h1>
+<h2>Pick a fruit:</h2>
+<li><p id = "Name0">Apple</p>     
+        <img id = "Image0" (click) = "showMore()" src = "http://www.themonitordaily.com/wp-content/uploads/2015/03/aplle.jpg">
+        <div id = "div0" *ngIf = "this.SM">
+            <button (click)="buy()">
+                Add to cart
+            </button>
+            <p id = "Desc0">This is an Apple.</p>
+            <p id = "ShowPrice0">Price : </p><p id = "Price0">5</p>
+            <p id = "ShowRating0">Rating : </p><p id = "Rating0">0</p>
+            <p id = "ShowComments0">Comments:</p><p id = "Comments0"> </p>
+        </div>
+        <p id="Stock0">Stock : </p><p id = "Quantity0">5</p>
+        <input type="number" id="QuantityInput0"> <p id = "AskQuantity0">How many?</p>
+        <input type="number" id="RatingInput0"> <p id = "AskRating0">Rating?</p>
+        <input type="text" id="CommentInput0"> <p id = "AskComment0">Comments?</p>
+    </li>
+    <li><p id = "Name1">Pear</p>
+        <img id = "Image1" (click) = "showMore()"  src = "https://www.buyfruit.com.au/images/P/Paradise-Pears__74461.jpg">
+        <div *ngIf = "this.SM">
+            <button (click)="buy()">
+                Add to cart
+            </button>
+            <p id = "Desc1">This is a Pear.</p>
+            <p id = "ShowPrice1">Price : </p><p id = "Price1">6</p>
+            <p id = "ShowRating1">Rating : </p><p id = "Rating1">0</p>
+            <p id = "ShowComments1">Comments:</p><p id = "Comments1"> </p>
+        </div>
+        <p>Stock : </p><p id = "Quantity1">5</p>
+        <input type="number" id="QuantityInput1"> <p id = "AskQuantity1">How many?</p>
+        <input type="number" id="RatingInput1"> <p id = "AskRating1">Rating?</p>
+        <input type="text" id="CommentInput1"> <p id = "AskComment1">Comments?</p>
+    </li>
+    <li><p id = "Name2">Orange</p>     
+        <img id = "Image2" (click) = "showMore()" src = "https://www.thermofisher.com/blog/wp-content/uploads/2014/11/orange_citrus_fruit_isolated.jpg">
+        <div *ngIf = "this.SM">
+            <button (click)="buy()">
+                Add to cart
+            </button>
+            <p id = "Desc2" >This is an Orange.</p>
+            <p id = "ShowPrice2">Price : </p><p id = "Price2">3</p>
+            <p id = "ShowRating2">Rating : </p><p id = "Rating2">0</p>
+            <p id = "ShowComments2">Comments:</p><p id = "Comments2"> </p>
+        </div>
+        <p>Stock : </p><p id = "Quantity2">5</p>
+        <input type="number" id="QuantityInput2"> <p id = "AskQuantity2">How many?</p>
+        <input type="number" id="RatingInput2"> <p id = "AskRating2">Rating?</p>
+        <input type="text" id="CommentInput2">  <p id = "AskComment2">Comments?</p>
+    </li>
+<script type='text/typescript' src='items.component.ts'> </script>

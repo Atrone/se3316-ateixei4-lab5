@@ -27,6 +27,7 @@ var Item     = require('./models/item.js');
 // =============================================================================
 var router = express.Router();              // get an instance of the express Router
 
+
 // middleware to use for all requests
 router.use(function(req, res, next) {
     // do logging
@@ -47,23 +48,25 @@ router.route('/items')
         console.log("hi");
         var item = new Item();      // create a new instance of the item model
         // filter all possible ways to input HTML or Javascript into the app
-        if((req.body.name.includes("<")) || (req.body.price.includes("<")) || (req.body.tax.includes("<")) || (req.body.name.includes(">"))
-        || (req.body.price.includes(">")) || (req.body.tax.includes(">")) || (req.body.name.includes("&")) || (req.body.price.includes("&"))
-        || (req.body.tax.includes("&")))
+        if((req.body.name.includes("<")) || (req.body.name.includes(">"))
+        || (req.body.name.includes("&")) || (req.body.comment.includes("<")) || (req.body.comment.includes(">"))
+        || (req.body.comment.includes("&")))
         {
             console.log("Filter")
         }
         // validates that price and tax are numbers
-        else if((isNaN(req.body.price)) | (isNaN(req.body.tax)) | (isNaN(req.body.quantity)))
+        else if((isNaN(req.body.price)) | (isNaN(req.body.quantity)) | (isNaN(req.body.rating)))
         {
             console.log("Validation")
         }
         else
         {
+            console.log("Getting there");
             item.name = req.body.name;  // set the items name (comes from the request)
             item.price = req.body.price;
-            item.tax = req.body.tax;
             item.quantity = req.body.quantity;
+            item.rating = req.body.rating;
+            item.comment = req.body.comment;
             // save the item and check for errors
             item.save(function(err) {
                 if (err)
