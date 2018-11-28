@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core'
 import {GetService} from '../get.service'
 import {DeleteService} from '../delete.service' 
+import {ItemsComponent} from '../items/items.component'
 
 @Component({
   selector: 'app-cart',
@@ -12,18 +13,13 @@ export class CartComponent implements OnInit {
   constructor(private getservice: GetService, private deleteservice : DeleteService) { 
     setInterval(()=>{
       this.getAllShow();
+      console.log()
     },2000)
   }
 
   ngOnInit() {
   }
 
-
-  orderAdd(id)
-  {
-    console.log("hello");
-  }
-  
   getAllShow()
   {
     this.getservice.getData(this.onResponseShow.bind(this));
@@ -43,7 +39,7 @@ export class CartComponent implements OnInit {
     for(var i = 0; i < res.length; i++)
     {
       this.createElement("LI",i.toString(),"One order of: " + res[i]['name'] + ", Costing: " + res[i]['price'] + "$ per " + res[i]['name'] 
-      + " and a quantity of " + res[i]['quantity'] + " coming up!");
+      + " and a quantity of " + res[i]['quantity'] + " for " + res[i]['user'] + " coming up!");
       this.createElement("BUTTON",(i+1).toString(),"Remove");
       this.createElement("BUTTON",(i+2).toString(),"+");
       this.createElement("BUTTON",(i+3).toString(),"-");
@@ -93,9 +89,7 @@ export class CartComponent implements OnInit {
       if(html == "Remove")
       {
         console.log("removeHere" + elementId);
-        this.deleteservice.deleteItem("5bfc78fde3d22fd7b3083acc").subscribe((response)=>{
-          console.log(response);
-        });
+        this.deleteservice.deleteItem('5bfccf8c14b2a6fe92553c7d').subscribe(data=>console.log(data));
       }
       else if(html == "+")
       {

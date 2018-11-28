@@ -3,7 +3,7 @@
 <li><p id = "Name0">Apple</p>     
         <img id = "Image0" (click) = "showMore()" src = "http://www.themonitordaily.com/wp-content/uploads/2015/03/aplle.jpg">
         <div id = "div0" *ngIf = "this.SM">
-            <button (click)="buy()">
+            <button (click)="addToCart()">
                 Add to cart
             </button>
             <p id = "Desc0">This is an Apple.</p>
@@ -19,7 +19,7 @@
     <li><p id = "Name1">Pear</p>
         <img id = "Image1" (click) = "showMore()"  src = "https://www.buyfruit.com.au/images/P/Paradise-Pears__74461.jpg">
         <div *ngIf = "this.SM">
-            <button (click)="buy()">
+            <button (click)="addToCart()">
                 Add to cart
             </button>
             <p id = "Desc1">This is a Pear.</p>
@@ -35,7 +35,7 @@
     <li><p id = "Name2">Orange</p>     
         <img id = "Image2" (click) = "showMore()" src = "https://www.thermofisher.com/blog/wp-content/uploads/2014/11/orange_citrus_fruit_isolated.jpg">
         <div *ngIf = "this.SM">
-            <button (click)="buy()">
+            <button (click)="addToCart()">
                 Add to cart
             </button>
             <p id = "Desc2" >This is an Orange.</p>

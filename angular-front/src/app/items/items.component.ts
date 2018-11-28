@@ -12,12 +12,10 @@ import * as firebase from 'firebase/app';
 })
 export class ItemsComponent implements OnInit {
   fruitPrices : int[] = [5,6,3];
-  fruitStock : int[] = [5,5,5];
+  fruitStock : int[] = [50,50,50];
   SM:boolean = false;
-  AppleComments:String;
-  PearComments:String;
-  OrangeComments:String;
-  
+  fruitComments:String[] = ["","",""];
+
   constructor(private postService: PostService, private getService: GetService) { 
     setInterval(()=>{
       this.sortByRatings();
@@ -33,9 +31,8 @@ export class ItemsComponent implements OnInit {
     this.getService.getData(this.sortByRatingsLogic.bind(this));
   }
   sortByRatingsLogic(res: string) {
-    this.AppleComments = "";
-    this.PearComments = "";
-    this.OrangeComments = "";
+    this.fruitComments = ["","",""];
+    this.fruitStock = [50,50,50];
     var fruitTotalRatings = [0,0,0];
     var fruitTimesRated = [0,0,0];
     var fruitAvgRatings = [0,0,0];
@@ -45,19 +42,22 @@ export class ItemsComponent implements OnInit {
       {
         fruitTimesRated[0] += 1;
         fruitTotalRatings[0] += res[i]['rating'];
-        this.AppleComments += (res[i]['comment']) + "~~";
+        this.fruitComments[0] += (res[i]['comment']) + "~~";
+        this.fruitStock[0] -= res[i]['quantity'];
       }
       if(res[i]['name'] == "Pear")
       {
         fruitTimesRated[1] += 1;
         fruitTotalRatings[1] += res[i]['rating'];
-        this.PearComments += (res[i]['comment']) + "~~";
+        this.fruitComments[1] += (res[i]['comment']) + "~~";
+        this.fruitStock[1] -= res[i]['quantity'];
       }
       if(res[i]['name'] == "Orange")
       {
         fruitTimesRated[2] += 1;
         fruitTotalRatings[2] += res[i]['rating'];
-        this.OrangeComments += (res[i]['comment']) + "~~";
+        this.fruitComments[2] += (res[i]['comment']) + "~~";
+        this.fruitStock[2] -= res[i]['quantity'];
       }
     }
     var fruitAvgRatings=[fruitTotalRatings[0]/fruitTimesRated[0],fruitTotalRatings[1]/fruitTimesRated[1],
@@ -77,44 +77,45 @@ export class ItemsComponent implements OnInit {
     var second = "";
     var third = "";
     console.log(ratings);
-    if(ratings[0] > ratings[1])
+    console.log(this.fruitStock);
+    if(ratings[0] >= ratings[1])
     {
-      if(ratings[0] > ratings[2])
+      if(ratings[0] >= ratings[2])
       {
         first = "Apple";
       }
     }
-    if(ratings[1] > ratings[0])
+    if(ratings[1] >= ratings[0])
     {
-      if(ratings[1] > ratings[2])
+      if(ratings[1] >= ratings[2])
       {
         first = "Pear";
       }
     }
-    if(ratings[2] > ratings[1])
+    if(ratings[2] >= ratings[1])
     {
-      if(ratings[2] > ratings[0])
+      if(ratings[2] >= ratings[0])
       {
         first = "Orange";
       }
     }
-    if(ratings[0] < ratings[1])
+    if(ratings[0] <= ratings[1])
     {
-      if(ratings[0] < ratings[2])
+      if(ratings[0] <= ratings[2])
       {
         third = "Apple";
       }
     }
-    if(ratings[1] < ratings[0])
+    if(ratings[1] <= ratings[0])
     {
-      if(ratings[1] < ratings[2])
+      if(ratings[1] <= ratings[2])
       {
         third = "Pear";
       }
     }
-    if(ratings[2] < ratings[1])
+    if(ratings[2] <= ratings[1])
     {
-      if(ratings[2] < ratings[0])
+      if(ratings[2] <= ratings[0])
       {
         third = "Orange";
       }
@@ -149,16 +150,16 @@ export class ItemsComponent implements OnInit {
     {
       document.getElementById('Name0').textContent = "Apple";
       document.getElementById('Image0').src = "http://www.themonitordaily.com/wp-content/uploads/2015/03/aplle.jpg";
-      document.getElementById('Price0').textContent = "5";
+      document.getElementById('Price0').textContent = this.fruitPrices[0].toString();
       document.getElementById('Quantity0').textContent = this.fruitStock[0].toString();
       document.getElementById('Desc0').textContent = "This is a Apple";
       document.getElementById('Rating0').textContent = ratings[2].toString();
       document.getElementById('Comments0').textContent = " ";
       for(var i = 0; i < 5; i++)
       {
-        if(this.AppleComments.split("~~")[i])
+        if(this.fruitComments[0].split("~~")[i])
         {
-          document.getElementById('Comments0').textContent += this.AppleComments.split("~~")[i] + "||";
+          document.getElementById('Comments0').textContent += this.fruitComments[0].split("~~")[i] + "||";
         }
       }
     }
@@ -166,16 +167,16 @@ export class ItemsComponent implements OnInit {
     {
       document.getElementById('Name0').textContent = "Pear";
       document.getElementById('Image0').src = "https://www.buyfruit.com.au/images/P/Paradise-Pears__74461.jpg";
-      document.getElementById('Price0').textContent = "6";
+      document.getElementById('Price0').textContent = this.fruitPrices[1].toString();
       document.getElementById('Quantity0').textContent = this.fruitStock[1].toString();
       document.getElementById('Desc0').textContent = "This is a Pear";
       document.getElementById('Rating0').textContent = ratings[2].toString();
       document.getElementById('Comments0').textContent = " ";
       for(var i = 0; i < 5; i++)
       {
-        if(this.PearComments.split("~~")[i])
+        if(this.fruitComments[1].split("~~")[i])
         {
-          document.getElementById('Comments0').textContent += this.PearComments.split("~~")[i] + "||";
+          document.getElementById('Comments0').textContent += this.fruitComments[1].split("~~")[i] + "||";
         }
       }
     }
@@ -183,16 +184,16 @@ export class ItemsComponent implements OnInit {
     {
       document.getElementById('Name0').textContent = "Orange";
       document.getElementById('Image0').src = "https://www.thermofisher.com/blog/wp-content/uploads/2014/11/orange_citrus_fruit_isolated.jpg";
-      document.getElementById('Price0').textContent = "3";
+      document.getElementById('Price0').textContent = this.fruitPrices[2].toString();
       document.getElementById('Quantity0').textContent = this.fruitStock[2].toString();
       document.getElementById('Desc0').textContent = "This is a Orange";
       document.getElementById('Rating0').textContent = ratings[2].toString();
       document.getElementById('Comments0').textContent = " ";
       for(var i = 0; i < 5; i++)
       {
-        if(this.OrangeComments.split("~~")[i])
+        if(this.fruitComments[2].split("~~")[i])
         {
-          document.getElementById('Comments0').textContent += this.OrangeComments.split("~~")[i] + "||";
+          document.getElementById('Comments0').textContent += this.fruitComments[2].split("~~")[i] + "||";
         }
       }
     }
@@ -200,16 +201,16 @@ export class ItemsComponent implements OnInit {
     {
       document.getElementById('Name1').textContent = "Apple";
       document.getElementById('Image1').src = "http://www.themonitordaily.com/wp-content/uploads/2015/03/aplle.jpg";
-      document.getElementById('Price1').textContent = "5";
+      document.getElementById('Price1').textContent = this.fruitPrices[0].toString();
       document.getElementById('Quantity1').textContent = this.fruitStock[0].toString();
       document.getElementById('Desc1').textContent = "This is a Apple";
       document.getElementById('Rating1').textContent = ratings[1].toString();
       document.getElementById('Comments1').textContent = " ";
       for(var i = 0; i < 5; i++)
       {
-        if(this.AppleComments.split("~~")[i])
+        if(this.fruitComments[0].split("~~")[i])
         {
-          document.getElementById('Comments1').textContent += this.AppleComments.split("~~")[i] + "||";
+          document.getElementById('Comments1').textContent += this.fruitComments[0].split("~~")[i] + "||";
         }
       }
     }
@@ -217,16 +218,16 @@ export class ItemsComponent implements OnInit {
     {
       document.getElementById('Name1').textContent = "Pear";
       document.getElementById('Image1').src = "https://www.buyfruit.com.au/images/P/Paradise-Pears__74461.jpg";
-      document.getElementById('Price1').textContent = "6";
+      document.getElementById('Price1').textContent = this.fruitPrices[1].toString();
       document.getElementById('Quantity1').textContent = this.fruitStock[1].toString();
       document.getElementById('Desc1').textContent = "This is a Pear";
       document.getElementById('Rating1').textContent = ratings[1].toString();
       document.getElementById('Comments1').textContent = " ";
       for(var i = 0; i < 5; i++)
       {
-        if(this.PearComments.split("~~")[i])
+        if(this.fruitComments[1].split("~~")[i])
         {
-          document.getElementById('Comments1').textContent += this.PearComments.split("~~")[i] + "||";
+          document.getElementById('Comments1').textContent += this.fruitComments[1].split("~~")[i] + "||";
         }
       }
     }
@@ -234,16 +235,16 @@ export class ItemsComponent implements OnInit {
     {
       document.getElementById('Name1').textContent = "Orange";
       document.getElementById('Image1').src = "https://www.thermofisher.com/blog/wp-content/uploads/2014/11/orange_citrus_fruit_isolated.jpg";
-      document.getElementById('Price1').textContent = "3";
+      document.getElementById('Price1').textContent = this.fruitPrices[2].toString();
       document.getElementById('Quantity1').textContent = this.fruitStock[2].toString();
       document.getElementById('Desc1').textContent = "This is a Orange";
       document.getElementById('Rating1').textContent = ratings[1].toString();
       document.getElementById('Comments1').textContent = " ";
       for(var i = 0; i < 5; i++)
       {
-        if(this.OrangeComments.split("~~")[i])
+        if(this.fruitComments[2].split("~~")[i])
         {
-          document.getElementById('Comments1').textContent += this.OrangeComments.split("~~")[i] + "||";
+          document.getElementById('Comments1').textContent += this.fruitComments[2].split("~~")[i] + "||";
         }
       }
     }
@@ -251,16 +252,16 @@ export class ItemsComponent implements OnInit {
     {
       document.getElementById('Name2').textContent = "Apple";
       document.getElementById('Image2').src = "http://www.themonitordaily.com/wp-content/uploads/2015/03/aplle.jpg";
-      document.getElementById('Price2').textContent = "5";
+      document.getElementById('Price2').textContent = this.fruitPrices[0].toString();
       document.getElementById('Quantity2').textContent = this.fruitStock[0].toString();
       document.getElementById('Desc2').textContent = "This is a Apple";
       document.getElementById('Rating2').textContent = ratings[0].toString();
       document.getElementById('Comments2').textContent = " ";
       for(var i = 0; i < 5; i++)
       {
-        if(this.AppleComments.split("~~")[i])
+        if(this.fruitComments[0].split("~~")[i])
         {
-          document.getElementById('Comments2').textContent += this.AppleComments.split("~~")[i] + "||";
+          document.getElementById('Comments2').textContent += this.fruitComments[0].split("~~")[i] + "||";
         }
       }
     }
@@ -268,16 +269,16 @@ export class ItemsComponent implements OnInit {
     {
       document.getElementById('Name2').textContent = "Pear";
       document.getElementById('Image2').src = "https://www.buyfruit.com.au/images/P/Paradise-Pears__74461.jpg";
-      document.getElementById('Price2').textContent = "6";
+      document.getElementById('Price2').textContent = this.fruitPrices[1].toString();
       document.getElementById('Quantity2').textContent = this.fruitStock[1].toString();
       document.getElementById('Desc2').textContent = "This is a Pear";
       document.getElementById('Rating2').textContent = ratings[0].toString();
       document.getElementById('Comments2').textContent = " ";
       for(var i = 0; i < 5; i++)
       {
-        if(this.PearComments.split("~~")[i])
+        if(this.fruitComments[1].split("~~")[i])
         {
-          document.getElementById('Comments2').textContent += this.PearComments.split("~~")[i] + "||";
+          document.getElementById('Comments2').textContent += this.fruitComments[1].split("~~")[i] + "||";
         }
       }
     }
@@ -285,16 +286,16 @@ export class ItemsComponent implements OnInit {
     {
       document.getElementById('Name2').textContent = "Orange";
       document.getElementById('Image2').src = "https://www.thermofisher.com/blog/wp-content/uploads/2014/11/orange_citrus_fruit_isolated.jpg";
-      document.getElementById('Price2').textContent = "3";
+      document.getElementById('Price2').textContent = this.fruitPrices[2].toString();
       document.getElementById('Quantity2').textContent = this.fruitStock[2].toString();
       document.getElementById('Desc2').textContent = "This is a Orange";
       document.getElementById('Rating2').textContent = ratings[0].toString();
       document.getElementById('Comments2').textContent = " ";
       for(var i = 0; i < 5; i++)
       {
-        if(this.OrangeComments.split("~~")[i])
+        if(this.fruitComments[2].split("~~")[i])
         {
-          document.getElementById('Comments2').textContent += this.OrangeComments.split("~~")[i] + "||";
+          document.getElementById('Comments2').textContent += this.fruitComments[2].split("~~")[i] + "||";
         }
       }
     }
@@ -359,9 +360,9 @@ export class ItemsComponent implements OnInit {
     console.log(first);
     console.log(second);
     console.log(third);
-    console.log(this.PearComments.split("~~")[0]);
-    console.log(this.AppleComments);
-    console.log(this.PearComments);
+    console.log(this.fruitComments[1].split("~~")[0]);
+    console.log(this.fruitComments[0]);
+    console.log(this.fruitComments[1]);
   }
   
   removeElement(elementId) 
@@ -375,7 +376,7 @@ export class ItemsComponent implements OnInit {
   {
     this.SM = true;
   }
-  buy() 
+  addToCart() 
   {
     console.log("hey")
     for(var i = 0; i < 3; i++)
@@ -383,10 +384,12 @@ export class ItemsComponent implements OnInit {
       console.log(parseInt((<HTMLInputElement>document.getElementById('RatingInput'+ i.toString())).value));
       console.log(parseInt((<HTMLInputElement>document.getElementById('QuantityInput'+ i.toString())).value));
       console.log(((<HTMLInputElement>document.getElementById('CommentInput'+ i.toString())).value));
-
-      if(parseInt((<HTMLInputElement>document.getElementById('RatingInput'+ i.toString())).value) && 
-      parseInt((<HTMLInputElement>document.getElementById('QuantityInput'+ i.toString())).value) && 
-      ((<HTMLInputElement>document.getElementById('CommentInput'+ i.toString())).value))
+      var ANewStock = (this.fruitStock[0] - parseInt((<HTMLInputElement>document.getElementById('QuantityInput'+ i.toString())).value));
+      var PNewStock = (this.fruitStock[1] - parseInt((<HTMLInputElement>document.getElementById('QuantityInput'+ i.toString())).value));
+      var ONewStock = (this.fruitStock[2] - parseInt((<HTMLInputElement>document.getElementById('QuantityInput'+ i.toString())).value));
+      if(parseInt((<HTMLInputElement>document.getElementById('QuantityInput'+ i.toString())).value) && 
+      (parseInt((<HTMLInputElement>document.getElementById('RatingInput'+ i.toString())).value) || 
+      ((<HTMLInputElement>document.getElementById('CommentInput'+ i.toString())).value)))
       {
         console.log("hooray");
         var data ={
@@ -395,25 +398,54 @@ export class ItemsComponent implements OnInit {
           quantity : parseInt((<HTMLInputElement>document.getElementById('QuantityInput'+ i.toString())).value),
           rating : parseInt((<HTMLInputElement>document.getElementById('RatingInput'+ i.toString())).value),
           comment : "COMMENT:" + (<HTMLInputElement>document.getElementById("CommentInput" + i.toString()).value).toString() + " RATING:" + 
-          (<HTMLInputElement>document.getElementById('RatingInput'+ i.toString())).value + " USER:" + firebase.auth().currentUser.email, 
+          (<HTMLInputElement>document.getElementById('RatingInput'+ i.toString())).value + " USER:" + firebase.auth().currentUser.email,
+          user : firebase.auth().currentUser.email,
         }
-        this.postService.postData(data).subscribe((response)=>{
-          console.log(response);
-        });
         if((document.getElementById("Name" + i.toString()).textContent) == "Apple")
         {
-          this.fruitStock[0] -= parseInt((<HTMLInputElement>document.getElementById('QuantityInput'+ i.toString())).value);
-          console.log(this.fruitStock[0]);
+          if(ANewStock >= 0)
+          {
+            this.fruitStock[0] -= parseInt((<HTMLInputElement>document.getElementById('QuantityInput'+ i.toString())).value);
+            console.log(this.fruitStock[0]);
+            this.postService.postData(data).subscribe((response)=>{
+            console.log(response);
+            });
+          }
+          else
+          {
+            alert("That's over the stock!");
+            console.log(this.fruitStock[0]);
+          }
         }
-        else if((document.getElementById("Name" + i.toString()).textContent) == "Pear")
+        if((document.getElementById("Name" + i.toString()).textContent) == "Pear")
         {
-          this.fruitStock[1] -= parseInt((<HTMLInputElement>document.getElementById('QuantityInput'+ i.toString())).value);
-          console.log(this.fruitStock[1]);
+          if(PNewStock >= 0)
+          {
+            this.fruitStock[1] -= parseInt((<HTMLInputElement>document.getElementById('QuantityInput'+ i.toString())).value);
+            console.log(this.fruitStock[1]);
+            this.postService.postData(data).subscribe((response)=>{
+            console.log(response);
+            });
+          }
+          else
+          {
+            alert("That's over the stock!");
+          }
         }
-        else if((document.getElementById("Name" + i.toString()).textContent) == "Orange")
+        if((document.getElementById("Name" + i.toString()).textContent) == "Orange")
         {
-          this.fruitStock[2] -= parseInt((<HTMLInputElement>document.getElementById('QuantityInput'+ i.toString())).value);
-          console.log(this.fruitStock[2]);
+          if(ONewStock >= 0)
+          {
+            this.fruitStock[2] -= parseInt((<HTMLInputElement>document.getElementById('QuantityInput'+ i.toString())).value);
+            console.log(this.fruitStock[2]);
+            this.postService.postData(data).subscribe((response)=>{
+            console.log(response);
+            });
+          }
+          else
+          {
+            alert("That's over the stock!");
+          }
         }
       }
     }

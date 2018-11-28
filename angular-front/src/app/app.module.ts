@@ -13,6 +13,7 @@ import { FormsModule } from '@angular/forms';
 import { ItemsComponent } from './items/items.component';
 import { CartComponent } from './cart/cart.component';
 import { DeleteComponent } from './delete/delete.component';
+import { CollectionsComponent } from './collections/collections.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { DeleteComponent } from './delete/delete.component';
     PostComponent,
     ItemsComponent,
     CartComponent,
-    DeleteComponent
+    DeleteComponent,
+    CollectionsComponent
     ],
   imports: [
     BrowserModule,

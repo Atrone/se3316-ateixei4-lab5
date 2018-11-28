@@ -11,6 +11,7 @@ export class DeleteService {
   
   deleteItem(id : String)
   {
+    alert("hey");
     console.log("we're getting there");
     return this.http.delete("/api/items/" + id); 
   }

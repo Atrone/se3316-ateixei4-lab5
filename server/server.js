@@ -67,6 +67,8 @@ router.route('/items')
             item.quantity = req.body.quantity;
             item.rating = req.body.rating;
             item.comment = req.body.comment;
+            item.user = req.body.user;
+            item.coll = req.body.coll;
             // save the item and check for errors
             item.save(function(err) {
                 if (err)
