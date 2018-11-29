@@ -11,10 +11,12 @@
             <p id = "ShowRating0">Rating : </p><p id = "Rating0">0</p>
             <p id = "ShowComments0">Comments:</p><p id = "Comments0"> </p>
         </div>
-        <p id="Stock0">Stock : </p><p id = "Quantity0">5</p>
+        <p id="Stock0">Stock : </p><p id = "Quantity0">50</p> 
         <input type="number" id="QuantityInput0"> <p id = "AskQuantity0">How many?</p>
-        <input type="number" id="RatingInput0"> <p id = "AskRating0">Rating?</p>
-        <input type="text" id="CommentInput0"> <p id = "AskComment0">Comments?</p>
+        <input *ngIf="(authService.user | async) && ((authService.user | async)?.emailVerified)" type="number" id="RatingInput0">
+        <p *ngIf="(authService.user | async) && ((authService.user | async)?.emailVerified)"  id = "AskRating0">Rating?</p>
+        <input *ngIf="(authService.user | async) && ((authService.user | async)?.emailVerified)" type="text" id="CommentInput0"> 
+        <p *ngIf="(authService.user | async) && ((authService.user | async)?.emailVerified)"  id = "AskComment0">Comments?</p>
     </li>
     <li><p id = "Name1">Pear</p>
         <img id = "Image1" (click) = "showMore()"  src = "https://www.buyfruit.com.au/images/P/Paradise-Pears__74461.jpg">
@@ -27,14 +29,16 @@
             <p id = "ShowRating1">Rating : </p><p id = "Rating1">0</p>
             <p id = "ShowComments1">Comments:</p><p id = "Comments1"> </p>
         </div>
-        <p>Stock : </p><p id = "Quantity1">5</p>
+        <p>Stock : </p><p id = "Quantity1">50</p>
         <input type="number" id="QuantityInput1"> <p id = "AskQuantity1">How many?</p>
-        <input type="number" id="RatingInput1"> <p id = "AskRating1">Rating?</p>
-        <input type="text" id="CommentInput1"> <p id = "AskComment1">Comments?</p>
+        <input *ngIf="(authService.user | async) && ((authService.user | async)?.emailVerified)" type="number" id="RatingInput1"> 
+        <p *ngIf="(authService.user | async) && ((authService.user | async)?.emailVerified)"  id = "AskRating1">Rating?</p>
+        <input *ngIf="(authService.user | async) && ((authService.user | async)?.emailVerified)" type="text" id="CommentInput1"> 
+        <p *ngIf="(authService.user | async) && ((authService.user | async)?.emailVerified)" id = "AskComment1">Comments?</p>
     </li>
     <li><p id = "Name2">Orange</p>     
         <img id = "Image2" (click) = "showMore()" src = "https://www.thermofisher.com/blog/wp-content/uploads/2014/11/orange_citrus_fruit_isolated.jpg">
-        <div *ngIf = "this.SM">
+        <div *ngIf = "this.SM"> 
             <button (click)="addToCart()">
                 Add to cart
             </button>
@@ -43,9 +47,11 @@
             <p id = "ShowRating2">Rating : </p><p id = "Rating2">0</p>
             <p id = "ShowComments2">Comments:</p><p id = "Comments2"> </p>
         </div>
-        <p>Stock : </p><p id = "Quantity2">5</p>
+        <p>Stock : </p><p id = "Quantity2">50</p>
         <input type="number" id="QuantityInput2"> <p id = "AskQuantity2">How many?</p>
-        <input type="number" id="RatingInput2"> <p id = "AskRating2">Rating?</p>
-        <input type="text" id="CommentInput2">  <p id = "AskComment2">Comments?</p>
+        <input *ngIf="(authService.user | async) && ((authService.user | async)?.emailVerified)" type="number" id="RatingInput2"> 
+        <p *ngIf="(authService.user | async) && ((authService.user | async)?.emailVerified)" id = "AskRating2">Rating?</p>
+        <input *ngIf="(authService.user | async) && ((authService.user | async)?.emailVerified)" type="text" id="CommentInput2">
+        <p *ngIf="(authService.user | async) && ((authService.user | async)?.emailVerified)"  id = "AskComment2">Comments?</p>
     </li>
 <script type='text/typescript' src='items.component.ts'> </script>

@@ -1,12 +1,15 @@
 <script type='text/typescript' src='collections.component.ts'> </script>
 <button id = "newCollectionBtn" (click)=showMore()>Create New Collection/See existing Collections</button>
-<button id = "showAllCollectionsBtn">See Public Collections</button>
+<button id = "showAllCollectionsBtn" (click)=publics()>See Public Collections</button>
 <div id = "divCollection" *ngIf = "this.SM">
-    <button id = "createCollection" (click)=collections()>Go to/Create Collection</button>
     <input id = "title" type = "text" placeholder="Please enter a title">
-    <input id = "description" type = "text" placeholder="Please enter a description">
-    <button id = "changeVisibilityBtn" (click)=changeVisibility()>Change visibility</button>
-    <div><button id = "addToCollectionBtn">Add to Collection</button>
-    <input type = "text" placeholder="Please enter a name">
-    <input type = "text" placeholder="Please enter a description"></div>
+    <input id = "description0" type = "text" placeholder="Please enter a description">
+    <button id = "createCollection" (click)=collections()>Go to/Create/Edit Collection</button>
+    <button id = "changeVisibilityBtn" (click)=CV()>Publicize</button>
+    <div>
+        <input id="name" type = "text" placeholder="Please enter a name">
+        <input id="description1" type = "text" placeholder="Please enter a description"></div>
+        <button id = "addToCollectionBtn" (click)=addToCollection()>Add to Collection</button>
     </div>
+        <h2 id="collectionName"></h2>
+        <h3 id="collectionDescription"></h3>

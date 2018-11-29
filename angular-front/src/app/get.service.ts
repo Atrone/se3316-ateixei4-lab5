@@ -1,3 +1,4 @@
+// imports for the get service
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
@@ -6,6 +7,7 @@ import { HttpClient } from '@angular/common/http';
 })
 export class GetService {
 
+// construct an instance of HTTPClient
 constructor(private http: HttpClient) { }
   
   /*

@@ -50,7 +50,9 @@ router.route('/items')
         // filter all possible ways to input HTML or Javascript into the app
         if((req.body.name.includes("<")) || (req.body.name.includes(">"))
         || (req.body.name.includes("&")) || (req.body.comment.includes("<")) || (req.body.comment.includes(">"))
-        || (req.body.comment.includes("&")))
+        || (req.body.comment.includes("&"))|| (req.body.desc.includes("<")) || (req.body.desc.includes(">"))
+        || (req.body.desc.includes("&"))|| (req.body.coll.includes("<")) || (req.body.coll.includes(">"))
+        || (req.body.coll.includes("&")))
         {
             console.log("Filter")
         }
@@ -69,13 +71,15 @@ router.route('/items')
             item.comment = req.body.comment;
             item.user = req.body.user;
             item.coll = req.body.coll;
+            item.desc = req.body.desc;
+            item.pub = req.body.pub;
             // save the item and check for errors
             item.save(function(err) {
                 if (err)
                     res.send(err);
             })
         }
-       res.redirect('/'); 
+       //res.redirect('/'); 
 
     })
     // get all the items (accessed at GET URL)
@@ -102,13 +106,25 @@ router.route('/items/:item_id')
 
         // use our item model to find the item we want
         Item.findById(req.params.item_id, function(err, item) {
-            console.log(req.params.item_id);
-            console.log(req.body.name);
-            
             if (err)
             {
                 res.send(err);
             }
+            if((req.body.name.includes("<")) || (req.body.name.includes(">"))
+            || (req.body.name.includes("&")) || (req.body.comment.includes("<")) || (req.body.comment.includes(">"))
+            || (req.body.comment.includes("&"))|| (req.body.desc.includes("<")) || (req.body.desc.includes(">"))
+            || (req.body.desc.includes("&"))|| (req.body.coll.includes("<")) || (req.body.coll.includes(">"))
+            || (req.body.coll.includes("&")))
+            {
+                console.log("Filter")
+            }
+            // validates that price and tax are numbers
+            else if((isNaN(req.body.price)) | (isNaN(req.body.quantity)) | (isNaN(req.body.rating)))
+            {
+                console.log("Validation")
+            }
+            else
+            {
             // filter all possible ways to input HTML or Javascript into the app
                 item.name = req.body.name;  // set the items name (comes from the request)
                 item.price = req.body.price;
@@ -119,6 +135,7 @@ router.route('/items/:item_id')
                     if (err)
                         res.send(err);
                 })
+            }
         })
     })
     // delete the item with this id (accessed at DELETE URL)
@@ -129,7 +146,6 @@ router.route('/items/:item_id')
             if (err)
                 res.send(err);
         })
-        res.redirect('/');
     });
 // REGISTER OUR ROUTES -------------------------------
 // all of our routes will be prefixed with /api

@@ -10,11 +10,11 @@ import {ItemsComponent} from '../items/items.component'
 })
 export class CartComponent implements OnInit {
   ids:String[];
-  constructor(private getservice: GetService, private deleteservice : DeleteService) { 
+  constructor(private getservice: GetService, public deleteservice : DeleteService) { 
     setInterval(()=>{
       this.getAllShow();
-      console.log()
-    },2000)
+      console.log();
+    },2000) 
   }
 
   ngOnInit() {
@@ -26,6 +26,10 @@ export class CartComponent implements OnInit {
   }
   
   onResponseShow(res: string) {
+    if(document.getElementById("-1") != null)
+      {
+        this.removeElement("-1");
+      }
     for(var i = 0; i < res.length; i++)
     {
       if(document.getElementById(i.toString()) != null)
@@ -36,13 +40,18 @@ export class CartComponent implements OnInit {
         this.removeElement((i+3).toString());
       }
     }
+    this.createElement("H1","-1","Shopping Cart");
+    console.log("that just happened");
     for(var i = 0; i < res.length; i++)
     {
-      this.createElement("LI",i.toString(),"One order of: " + res[i]['name'] + ", Costing: " + res[i]['price'] + "$ per " + res[i]['name'] 
-      + " and a quantity of " + res[i]['quantity'] + " for " + res[i]['user'] + " coming up!");
-      this.createElement("BUTTON",(i+1).toString(),"Remove");
-      this.createElement("BUTTON",(i+2).toString(),"+");
-      this.createElement("BUTTON",(i+3).toString(),"-");
+      if(!res[i]['coll'])
+      {
+        this.createElement("LI",i.toString(),"One order of: " + res[i]['name'] + ", Costing: " + res[i]['price'] + "$ per " + res[i]['name'] 
+        + " and a quantity of " + res[i]['quantity'] + " for " + res[i]['user'] + " coming up!");
+        this.createElement("BUTTON",(i+1).toString(),"Remove");
+        this.createElement("BUTTON",(i+2).toString(),"+");
+        this.createElement("BUTTON",(i+3).toString(),"-");
+      }
     }
     this.updateTotals(res);
   }

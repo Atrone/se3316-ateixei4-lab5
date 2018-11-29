@@ -11,6 +11,7 @@ export class PutService {
   
   updateItem(id : String)
   {
+    console.log("OMG HEY");
     //return this.http.put
   }
   

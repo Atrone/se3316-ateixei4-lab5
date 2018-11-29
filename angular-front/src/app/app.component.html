@@ -36,6 +36,7 @@
 <app-items></app-items>
 <div *ngIf="(authService.user | async) && ((authService.user | async)?.emailVerified)">
 <app-cart></app-cart>
-<div><app-collections></app-collections></div>
+  <div><app-collections></app-collections></div>
 </div>
-<router-outlet></router-outlet>
+<div><app-dmca></app-dmca></div>
+<router-outlet></router-outlet> 

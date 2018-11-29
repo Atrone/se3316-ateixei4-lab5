@@ -1,3 +1,4 @@
+// imports for delete service
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
@@ -6,13 +7,19 @@ import { HttpClient } from '@angular/common/http';
   providedIn: 'root'
 })
 export class DeleteService {
-
+  
+  // construct HttpClient for delete
   constructor(private http: HttpClient) { }
   
+  //deletes item corresponding to the id, returns result
   deleteItem(id : String)
   {
     alert("hey");
     console.log("we're getting there");
-    return this.http.delete("/api/items/" + id); 
+    return this.http.delete<void>("/api/items/" + id); 
+  }
+  errorHandle()
+  {
+    alert("hey");
   }
 }

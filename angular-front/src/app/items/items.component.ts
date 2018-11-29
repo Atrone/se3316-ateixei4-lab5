@@ -3,6 +3,7 @@ import {PostService} from '../post.service'
 import {GetService} from '../get.service'
 import {ItemsService} from '../items.service'
 import { AngularFireAuth } from 'angularfire2/auth';
+import { AuthService } from '../auth.service';
 import * as firebase from 'firebase/app';
 
 @Component({
@@ -16,7 +17,7 @@ export class ItemsComponent implements OnInit {
   SM:boolean = false;
   fruitComments:String[] = ["","",""];
 
-  constructor(private postService: PostService, private getService: GetService) { 
+  constructor(private postService: PostService, private getService: GetService, public authService: AuthService) { 
     setInterval(()=>{
       this.sortByRatings();
       console.log(firebase.auth().currentUser.email);
@@ -38,26 +39,29 @@ export class ItemsComponent implements OnInit {
     var fruitAvgRatings = [0,0,0];
     for(var i = 0; i < res.length; i++)
     {
-      if(res[i]['name'] == "Apple")
+      if(!res[i]['coll'])
       {
-        fruitTimesRated[0] += 1;
-        fruitTotalRatings[0] += res[i]['rating'];
-        this.fruitComments[0] += (res[i]['comment']) + "~~";
-        this.fruitStock[0] -= res[i]['quantity'];
-      }
-      if(res[i]['name'] == "Pear")
-      {
-        fruitTimesRated[1] += 1;
-        fruitTotalRatings[1] += res[i]['rating'];
-        this.fruitComments[1] += (res[i]['comment']) + "~~";
-        this.fruitStock[1] -= res[i]['quantity'];
-      }
-      if(res[i]['name'] == "Orange")
-      {
-        fruitTimesRated[2] += 1;
-        fruitTotalRatings[2] += res[i]['rating'];
-        this.fruitComments[2] += (res[i]['comment']) + "~~";
-        this.fruitStock[2] -= res[i]['quantity'];
+        if(res[i]['name'] == "Apple")
+        {
+          fruitTimesRated[0] += 1;
+          fruitTotalRatings[0] += res[i]['rating'];
+          this.fruitComments[0] += (res[i]['comment']) + "~~";
+          this.fruitStock[0] -= res[i]['quantity'];
+        }
+        if(res[i]['name'] == "Pear")
+        {
+          fruitTimesRated[1] += 1;
+          fruitTotalRatings[1] += res[i]['rating'];
+          this.fruitComments[1] += (res[i]['comment']) + "~~";
+          this.fruitStock[1] -= res[i]['quantity'];
+        }
+        if(res[i]['name'] == "Orange")
+        {
+          fruitTimesRated[2] += 1;
+          fruitTotalRatings[2] += res[i]['rating'];
+          this.fruitComments[2] += (res[i]['comment']) + "~~";
+          this.fruitStock[2] -= res[i]['quantity'];
+        }
       }
     }
     var fruitAvgRatings=[fruitTotalRatings[0]/fruitTimesRated[0],fruitTotalRatings[1]/fruitTimesRated[1],
@@ -156,7 +160,7 @@ export class ItemsComponent implements OnInit {
       document.getElementById('Rating0').textContent = ratings[2].toString();
       document.getElementById('Comments0').textContent = " ";
       for(var i = 0; i < 5; i++)
-      {
+      { 
         if(this.fruitComments[0].split("~~")[i])
         {
           document.getElementById('Comments0').textContent += this.fruitComments[0].split("~~")[i] + "||";
@@ -400,6 +404,9 @@ export class ItemsComponent implements OnInit {
           comment : "COMMENT:" + (<HTMLInputElement>document.getElementById("CommentInput" + i.toString()).value).toString() + " RATING:" + 
           (<HTMLInputElement>document.getElementById('RatingInput'+ i.toString())).value + " USER:" + firebase.auth().currentUser.email,
           user : firebase.auth().currentUser.email,
+          desc : "",
+          coll : "",
+          pub : false, 
         }
         if((document.getElementById("Name" + i.toString()).textContent) == "Apple")
         {

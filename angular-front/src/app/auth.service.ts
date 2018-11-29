@@ -1,3 +1,4 @@
+// imports for the auth service
 import { Injectable } from '@angular/core';
 
 import { AngularFireAuth } from 'angularfire2/auth';
@@ -7,14 +8,17 @@ import { Observable } from 'rxjs';
 
 @Injectable()
 export class AuthService {
+  // create vars for user, account creation error, account access error, and deactivated account error.
   user: Observable<firebase.User>;
   NACError:boolean = false;
   AAError:boolean = false
   DError:boolean = false;
+  // construct an angularFireAuth instance, set the user to the auth state
   constructor(private firebaseAuth: AngularFireAuth) {
     this.user = firebaseAuth.authState;
   }
   
+  //sends email verification
   sendEmailVerification(){
     firebase.auth().currentUser.sendEmailVerification().then(function(){
       console.log("Check your email");
@@ -23,6 +27,7 @@ export class AuthService {
       })
   }
 
+  // signs up user, if sucess, sends email verification, sets error booleans
   signup(email: string, password: string) {
     this.firebaseAuth
       .auth
@@ -42,7 +47,8 @@ export class AuthService {
           console.log('Something went wrong:',err.message);
       });
   }
-
+  
+  //logs in user, sets error booleans
   login(email: string, password: string) {
     this.firebaseAuth
       .auth
@@ -70,6 +76,7 @@ export class AuthService {
       });
   }
 
+  // logs out user, sets error booleans
   logout() {
     this.firebaseAuth
       .auth

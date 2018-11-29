@@ -1,3 +1,4 @@
+//imports for the app
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
@@ -14,7 +15,10 @@ import { ItemsComponent } from './items/items.component';
 import { CartComponent } from './cart/cart.component';
 import { DeleteComponent } from './delete/delete.component';
 import { CollectionsComponent } from './collections/collections.component';
+import { PutComponent } from './put/put.component';
+import { DMCAComponent } from './dmca/dmca.component';
 
+//declarations, imports, providers, and bootstrap
 @NgModule({
   declarations: [
     AppComponent,
@@ -23,7 +27,9 @@ import { CollectionsComponent } from './collections/collections.component';
     ItemsComponent,
     CartComponent,
     DeleteComponent,
-    CollectionsComponent
+    CollectionsComponent,
+    PutComponent,
+    DMCAComponent
     ],
   imports: [
     BrowserModule,
