@@ -19,4 +19,7 @@ constructor(private http: HttpClient) { }
           callback_fun(data);
       });
   }
+  getSingleData(id : String) {
+      return this.http.get('/api/items/' + id);
+  }
 }

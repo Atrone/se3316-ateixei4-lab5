@@ -1,3 +1,4 @@
+// imports
 import { Component, OnInit } from '@angular/core'
 import {GetService} from '../get.service'
 import {DeleteService} from '../delete.service' 
@@ -10,6 +11,9 @@ import {ItemsComponent} from '../items/items.component'
 })
 export class CartComponent implements OnInit {
   ids:String[];
+  
+  // constantly refresh the items in cart with the most up to date values (every 2 seconds) , creates instances of GetService and
+  //DeleteService
   constructor(private getservice: GetService, public deleteservice : DeleteService) { 
     setInterval(()=>{
       this.getAllShow();
@@ -19,12 +23,14 @@ export class CartComponent implements OnInit {
 
   ngOnInit() {
   }
-
+  
+  // get all runs on a 2s loop
   getAllShow()
   {
-    this.getservice.getData(this.onResponseShow.bind(this));
+    this.getservice.getData(this.onResponseShow.bind(this)); // get the array of mLab data
   }
   
+  // handles logic for removing and re inserting cart's html elements
   onResponseShow(res: string) {
     if(document.getElementById("-1") != null)
       {
@@ -44,7 +50,7 @@ export class CartComponent implements OnInit {
     console.log("that just happened");
     for(var i = 0; i < res.length; i++)
     {
-      if(!res[i]['coll'])
+      if(!res[i]['coll']) // only create elements for the cart if there is no collection associated with this
       {
         this.createElement("LI",i.toString(),"One order of: " + res[i]['name'] + ", Costing: " + res[i]['price'] + "$ per " + res[i]['name'] 
         + " and a quantity of " + res[i]['quantity'] + " for " + res[i]['user'] + " coming up!");
@@ -55,10 +61,12 @@ export class CartComponent implements OnInit {
     }
     this.updateTotals(res);
   }
+  // buy all items from the cart called by the buy all button
   buyAll() 
   {
-    this.getservice.getData(this.buyAllLogic.bind(this));
+    this.getservice.getData(this.buyAllLogic.bind(this)); // get the array of mLab data
   }
+  // the logic behind buying all items from cart
   buyAllLogic(res: string)
   {
     if(confirm("Are you sure you want to buy all orders?"))
@@ -66,10 +74,12 @@ export class CartComponent implements OnInit {
       console.log(res[1]['name']);
     }
   }
+  // remove all items from the cart called by the cancel button
   removeAll()
   {
-    this.getservice.getData(this.removeAllLogic.bind(this));
+    this.getservice.getData(this.removeAllLogic.bind(this)); // get the array of mlab data
   }
+  // the logic behind removing all items from cart
   removeAllLogic(res: string)
   {
     if(confirm("Are you sure you want to delete all orders?"))
@@ -77,6 +87,7 @@ export class CartComponent implements OnInit {
       console.log(res[1]['name']);
     }
   }
+  // update the total value with the most current value
   updateTotals(res:string)
   {
     var total = 0;
@@ -87,28 +98,23 @@ export class CartComponent implements OnInit {
     document.getElementById('totals').textContent = "TOTAL COMES TO: $" + total.toString();
   }
   
+  removeItem()
+  {
+    //this.deleteservice.deleteItem('5bff35551508714a9ab49eb1').subscribe(data=>console.log(data));
+  }
+  
+  // create a new html element
   createElement(element,elementId,html)
   {
     let x = document.createElement(element);
     let y = document.createTextNode(html);
     x.setAttribute('id', elementId);
+    if(html == "Remove")
+    {
+      //$("elementId").attr("click","this.removeItem()"); 
+    }
     x.appendChild(y);
     document.body.appendChild(x);
-    x.addEventListener("click",function(){
-      if(html == "Remove")
-      {
-        console.log("removeHere" + elementId);
-        this.deleteservice.deleteItem('5bfccf8c14b2a6fe92553c7d').subscribe(data=>console.log(data));
-      }
-      else if(html == "+")
-      {
-        console.log("addHere" + elementId);
-      }
-      else if(html == "-")
-      {
-        console.log("subHere" + elementId);
-      }
-    });
   }
   // removes an element
   removeElement(elementId) {

@@ -13,6 +13,7 @@ export class PostComponent implements OnInit {
   ngOnInit() {
   }
   
+  // posts a new fruit
   postFruit(name:String,price:number,tax:number,quantity:number){
     var data ={
       name : (<HTMLInputElement>document.getElementById('name')).value,

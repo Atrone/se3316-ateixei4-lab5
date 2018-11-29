@@ -12,11 +12,13 @@ import * as firebase from 'firebase/app';
   styleUrls: ['./items.component.css']
 })
 export class ItemsComponent implements OnInit {
+  // define and initialize fruitPrices, fruitStock, ShowMore bool and the fruit comments
   fruitPrices : int[] = [5,6,3];
   fruitStock : int[] = [50,50,50];
   SM:boolean = false;
   fruitComments:String[] = ["","",""];
 
+  // loop sortByRatings every 2s, create an instance of postService, getService, and authService
   constructor(private postService: PostService, private getService: GetService, public authService: AuthService) { 
     setInterval(()=>{
       this.sortByRatings();
@@ -27,10 +29,12 @@ export class ItemsComponent implements OnInit {
   ngOnInit() {
   }
   
+  // sortByRatings happens on a 2s loop
   sortByRatings()
   {
     this.getService.getData(this.sortByRatingsLogic.bind(this));
   }
+  // handles the logic of finding the avg ratings, and getting the comments and decreasing the stock
   sortByRatingsLogic(res: string) {
     this.fruitComments = ["","",""];
     this.fruitStock = [50,50,50];
@@ -74,7 +78,8 @@ export class ItemsComponent implements OnInit {
   }
   
 
-  
+  // handles the logic behind sorting the fruit by ratings, through a choose mathematical model, and also handles
+  // sorting the html elements by the rating
   sortByRatingsHTML(ratings)
   {
     var first = "";
@@ -360,13 +365,6 @@ export class ItemsComponent implements OnInit {
         this.removeElement('AskRating2');
         this.removeElement('AskComment2'); 
       }
-      
-    console.log(first);
-    console.log(second);
-    console.log(third);
-    console.log(this.fruitComments[1].split("~~")[0]);
-    console.log(this.fruitComments[0]);
-    console.log(this.fruitComments[1]);
   }
   
   removeElement(elementId) 
@@ -376,18 +374,16 @@ export class ItemsComponent implements OnInit {
     element.parentNode.removeChild(element);
   }
   
+  // showMore happens on a click of an item
   showMore()
   {
     this.SM = true;
   }
+  // adds item to cart, updates stock, and checks if the request is over stock, if it is over stock, then alert the user
   addToCart() 
   {
-    console.log("hey")
     for(var i = 0; i < 3; i++)
     {
-      console.log(parseInt((<HTMLInputElement>document.getElementById('RatingInput'+ i.toString())).value));
-      console.log(parseInt((<HTMLInputElement>document.getElementById('QuantityInput'+ i.toString())).value));
-      console.log(((<HTMLInputElement>document.getElementById('CommentInput'+ i.toString())).value));
       var ANewStock = (this.fruitStock[0] - parseInt((<HTMLInputElement>document.getElementById('QuantityInput'+ i.toString())).value));
       var PNewStock = (this.fruitStock[1] - parseInt((<HTMLInputElement>document.getElementById('QuantityInput'+ i.toString())).value));
       var ONewStock = (this.fruitStock[2] - parseInt((<HTMLInputElement>document.getElementById('QuantityInput'+ i.toString())).value));

@@ -1,3 +1,4 @@
+// imports
 import { Component, OnInit } from '@angular/core';
 import {PostService} from '../post.service'
 import {GetService} from '../get.service'
@@ -13,6 +14,7 @@ import {PutService} from '../put.service';
 })
 export class CollectionsComponent implements OnInit {
   SM:boolean = false;
+  // creates instances of PostService, GetService, and PutService
   constructor(private postService: PostService, private getService: GetService
   , private putService : PutService) { 
   }
@@ -24,11 +26,12 @@ export class CollectionsComponent implements OnInit {
     this.SM = true;
   }
   
+  // CV is called on the publicity button
   CV()
   {
     this.getService.getData(this.CVLogic.bind(this));
   }
-  
+  // logic to change a collection's visibility
   CVLogic(res:string)
   {
     if(document.getElementById('changeVisibilityBtn').textContent == "Privatize")
@@ -52,17 +55,20 @@ export class CollectionsComponent implements OnInit {
     }
   }
   
+  // collections is called on create/edit/see button
   collections()
   {
     console.log("hey");
     this.getService.getData(this.showCollection.bind(this));
   }
   
+  // public is called on see public collections button
   publics()
   {
     this.getService.getData(this.showPublic.bind(this));
   }
   
+  // show collection handles the HTML logic to show the collection
   showCollection(res : String)
   {
     document.getElementById('collectionName').textContent = "Current Collection: " + document.getElementById('title').value;
@@ -82,6 +88,7 @@ export class CollectionsComponent implements OnInit {
       } 
     }
   }
+  // show public handles the logic to show the public collections
   showPublic(res : string)
   {
     for(var i = res.length+6; i < (2*res.length)+6; i++)
@@ -96,6 +103,7 @@ export class CollectionsComponent implements OnInit {
     }
   }
   
+  // creates an html element
   createElement(element,elementId,html)
   {
     let x = document.createElement(element);
@@ -104,13 +112,14 @@ export class CollectionsComponent implements OnInit {
     x.appendChild(y);
     document.body.appendChild(x);
   }
+  // removes an html element
     removeElement(elementId) {
     // Removes an element from the document
     var element = document.getElementById(elementId);
     element.parentNode.removeChild(element);
   }
 
-  
+  // adds an element to collection
   addToCollection()
   {
     var data ={

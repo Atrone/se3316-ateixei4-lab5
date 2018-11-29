@@ -26,6 +26,7 @@ export class GetComponent implements OnInit {
    * The HTTP request is aynchronous.
    * Therefore a callback function is required to get back the response.
    */
+   // handles the html logic to see all cart items
   onResponse(res: string) {
     //this.response = "<li>" + res[1]['name'] + "</li>";
     for(var i = 0; i < res.length; i++)
@@ -41,6 +42,7 @@ export class GetComponent implements OnInit {
     }
   }
   
+  //creates an html element
   createElement(element,elementId,html)
   {
     let x = document.createElement(element);

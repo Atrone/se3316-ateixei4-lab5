@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {GetService} from '../get.service';
 
 @Component({
   selector: 'app-dmca',
@@ -7,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DMCAComponent implements OnInit {
 
-  constructor() { }
+  constructor(private getService: GetService) { }
 
   ngOnInit() {
   }
