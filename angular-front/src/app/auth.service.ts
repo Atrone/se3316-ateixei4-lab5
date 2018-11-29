@@ -1,3 +1,5 @@
+// BELOW CODE HAS BEEN REFERENCED FROM ALLIGATOR.IO
+
 // imports for the auth service
 import { Injectable } from '@angular/core';
 
