@@ -12,19 +12,18 @@ import * as firebase from 'firebase/app';
   styleUrls: ['./items.component.css']
 })
 export class ItemsComponent implements OnInit {
-  // define and initialize fruitPrices, fruitStock, ShowMore bool and the fruit comments
-  fruitPrices : int[] = [5,6,3];
-  fruitStock : int[] = [50,50,50];
-  SM:boolean = false;
-  fruitComments:String[] = ["","",""];
-
   // loop sortByRatings every 2s, create an instance of postService, getService, and authService
-  constructor(private postService: PostService, private getService: GetService, public authService: AuthService) { 
+  constructor(private postService: PostService, private getService: GetService, public authService: AuthService, public itemsservice: ItemsService) { 
     setInterval(()=>{
       this.sortByRatings();
       console.log(firebase.auth().currentUser.email);
-    },2000)
+    },500)
   }
+  
+  // define and initialize fruitPrices, fruitStock, ShowMore bool and the fruit comments
+  SM:boolean = false;
+  fruitComments:String[] = ["","",""];
+
 
   ngOnInit() {
   }
@@ -37,37 +36,41 @@ export class ItemsComponent implements OnInit {
   // handles the logic of finding the avg ratings, and getting the comments and decreasing the stock
   sortByRatingsLogic(res: string) {
     this.fruitComments = ["","",""];
-    this.fruitStock = [50,50,50];
+    this.itemsservice.fruitStock = [50,50,50];
     var fruitTotalRatings = [0,0,0];
     var fruitTimesRated = [0,0,0];
     var fruitAvgRatings = [0,0,0];
     for(var i = 0; i < res.length; i++)
     {
-      if(!res[i]['coll'])
+      if(!(res[i]['coll']))
       {
-        if(res[i]['name'] == "Apple")
+        if(res[i]['name'])
         {
-          fruitTimesRated[0] += 1;
-          fruitTotalRatings[0] += res[i]['rating'];
-          this.fruitComments[0] += (res[i]['comment']) + "~~";
-          this.fruitStock[0] -= res[i]['quantity'];
-        }
-        if(res[i]['name'] == "Pear")
-        {
-          fruitTimesRated[1] += 1;
-          fruitTotalRatings[1] += res[i]['rating'];
-          this.fruitComments[1] += (res[i]['comment']) + "~~";
-          this.fruitStock[1] -= res[i]['quantity'];
-        }
-        if(res[i]['name'] == "Orange")
-        {
-          fruitTimesRated[2] += 1;
-          fruitTotalRatings[2] += res[i]['rating'];
-          this.fruitComments[2] += (res[i]['comment']) + "~~";
-          this.fruitStock[2] -= res[i]['quantity'];
+          if(res[i]['name'] == "Apple")
+          {
+            fruitTimesRated[0] += 1;
+            fruitTotalRatings[0] += res[i]['rating'];
+            this.fruitComments[0] += (res[i]['comment']) + "~~";
+            this.itemsservice.fruitStock[0] -= res[i]['quantity'];
+          }
+          if(res[i]['name'] == "Pear")
+          {
+            fruitTimesRated[1] += 1;
+            fruitTotalRatings[1] += res[i]['rating'];
+            this.fruitComments[1] += (res[i]['comment']) + "~~";
+            this.itemsservice.fruitStock[1] -= res[i]['quantity'];
+          }
+          if(res[i]['name'] == "Orange")
+          {
+            fruitTimesRated[2] += 1;
+            fruitTotalRatings[2] += res[i]['rating'];
+            this.fruitComments[2] += (res[i]['comment']) + "~~";
+            this.itemsservice.fruitStock[2] -= res[i]['quantity'];
+          }
         }
       }
     }
+    console.log(this.itemsservice.fruitStock[2]);
     var fruitAvgRatings=[fruitTotalRatings[0]/fruitTimesRated[0],fruitTotalRatings[1]/fruitTimesRated[1],
     fruitTotalRatings[2]/fruitTimesRated[2]];
     for(var i = 0; i < 3; i++)
@@ -86,7 +89,7 @@ export class ItemsComponent implements OnInit {
     var second = "";
     var third = "";
     console.log(ratings);
-    console.log(this.fruitStock);
+    console.log(this.itemsservice.fruitStock);
     if(ratings[0] >= ratings[1])
     {
       if(ratings[0] >= ratings[2])
@@ -159,8 +162,8 @@ export class ItemsComponent implements OnInit {
     {
       document.getElementById('Name0').textContent = "Apple";
       document.getElementById('Image0').src = "http://www.themonitordaily.com/wp-content/uploads/2015/03/aplle.jpg";
-      document.getElementById('Price0').textContent = this.fruitPrices[0].toString();
-      document.getElementById('Quantity0').textContent = this.fruitStock[0].toString();
+      document.getElementById('Price0').textContent = this.itemsservice.fruitPrices[0].toString();
+      document.getElementById('Quantity0').textContent = this.itemsservice.fruitStock[0].toString();
       document.getElementById('Desc0').textContent = "This is a Apple";
       document.getElementById('Rating0').textContent = ratings[2].toString();
       document.getElementById('Comments0').textContent = " ";
@@ -176,8 +179,8 @@ export class ItemsComponent implements OnInit {
     {
       document.getElementById('Name0').textContent = "Pear";
       document.getElementById('Image0').src = "https://www.buyfruit.com.au/images/P/Paradise-Pears__74461.jpg";
-      document.getElementById('Price0').textContent = this.fruitPrices[1].toString();
-      document.getElementById('Quantity0').textContent = this.fruitStock[1].toString();
+      document.getElementById('Price0').textContent = this.itemsservice.fruitPrices[1].toString();
+      document.getElementById('Quantity0').textContent = this.itemsservice.fruitStock[1].toString();
       document.getElementById('Desc0').textContent = "This is a Pear";
       document.getElementById('Rating0').textContent = ratings[2].toString();
       document.getElementById('Comments0').textContent = " ";
@@ -193,8 +196,8 @@ export class ItemsComponent implements OnInit {
     {
       document.getElementById('Name0').textContent = "Orange";
       document.getElementById('Image0').src = "https://www.thermofisher.com/blog/wp-content/uploads/2014/11/orange_citrus_fruit_isolated.jpg";
-      document.getElementById('Price0').textContent = this.fruitPrices[2].toString();
-      document.getElementById('Quantity0').textContent = this.fruitStock[2].toString();
+      document.getElementById('Price0').textContent = this.itemsservice.fruitPrices[2].toString();
+      document.getElementById('Quantity0').textContent = this.itemsservice.fruitStock[2].toString();
       document.getElementById('Desc0').textContent = "This is a Orange";
       document.getElementById('Rating0').textContent = ratings[2].toString();
       document.getElementById('Comments0').textContent = " ";
@@ -210,8 +213,8 @@ export class ItemsComponent implements OnInit {
     {
       document.getElementById('Name1').textContent = "Apple";
       document.getElementById('Image1').src = "http://www.themonitordaily.com/wp-content/uploads/2015/03/aplle.jpg";
-      document.getElementById('Price1').textContent = this.fruitPrices[0].toString();
-      document.getElementById('Quantity1').textContent = this.fruitStock[0].toString();
+      document.getElementById('Price1').textContent = this.itemsservice.fruitPrices[0].toString();
+      document.getElementById('Quantity1').textContent = this.itemsservice.fruitStock[0].toString();
       document.getElementById('Desc1').textContent = "This is a Apple";
       document.getElementById('Rating1').textContent = ratings[1].toString();
       document.getElementById('Comments1').textContent = " ";
@@ -227,8 +230,8 @@ export class ItemsComponent implements OnInit {
     {
       document.getElementById('Name1').textContent = "Pear";
       document.getElementById('Image1').src = "https://www.buyfruit.com.au/images/P/Paradise-Pears__74461.jpg";
-      document.getElementById('Price1').textContent = this.fruitPrices[1].toString();
-      document.getElementById('Quantity1').textContent = this.fruitStock[1].toString();
+      document.getElementById('Price1').textContent = this.itemsservice.fruitPrices[1].toString();
+      document.getElementById('Quantity1').textContent = this.itemsservice.fruitStock[1].toString();
       document.getElementById('Desc1').textContent = "This is a Pear";
       document.getElementById('Rating1').textContent = ratings[1].toString();
       document.getElementById('Comments1').textContent = " ";
@@ -244,8 +247,8 @@ export class ItemsComponent implements OnInit {
     {
       document.getElementById('Name1').textContent = "Orange";
       document.getElementById('Image1').src = "https://www.thermofisher.com/blog/wp-content/uploads/2014/11/orange_citrus_fruit_isolated.jpg";
-      document.getElementById('Price1').textContent = this.fruitPrices[2].toString();
-      document.getElementById('Quantity1').textContent = this.fruitStock[2].toString();
+      document.getElementById('Price1').textContent = this.itemsservice.fruitPrices[2].toString();
+      document.getElementById('Quantity1').textContent = this.itemsservice.fruitStock[2].toString();
       document.getElementById('Desc1').textContent = "This is a Orange";
       document.getElementById('Rating1').textContent = ratings[1].toString();
       document.getElementById('Comments1').textContent = " ";
@@ -261,8 +264,8 @@ export class ItemsComponent implements OnInit {
     {
       document.getElementById('Name2').textContent = "Apple";
       document.getElementById('Image2').src = "http://www.themonitordaily.com/wp-content/uploads/2015/03/aplle.jpg";
-      document.getElementById('Price2').textContent = this.fruitPrices[0].toString();
-      document.getElementById('Quantity2').textContent = this.fruitStock[0].toString();
+      document.getElementById('Price2').textContent = this.itemsservice.fruitPrices[0].toString();
+      document.getElementById('Quantity2').textContent = this.itemsservice.fruitStock[0].toString();
       document.getElementById('Desc2').textContent = "This is a Apple";
       document.getElementById('Rating2').textContent = ratings[0].toString();
       document.getElementById('Comments2').textContent = " ";
@@ -278,8 +281,8 @@ export class ItemsComponent implements OnInit {
     {
       document.getElementById('Name2').textContent = "Pear";
       document.getElementById('Image2').src = "https://www.buyfruit.com.au/images/P/Paradise-Pears__74461.jpg";
-      document.getElementById('Price2').textContent = this.fruitPrices[1].toString();
-      document.getElementById('Quantity2').textContent = this.fruitStock[1].toString();
+      document.getElementById('Price2').textContent = this.itemsservice.fruitPrices[1].toString();
+      document.getElementById('Quantity2').textContent = this.itemsservice.fruitStock[1].toString();
       document.getElementById('Desc2').textContent = "This is a Pear";
       document.getElementById('Rating2').textContent = ratings[0].toString();
       document.getElementById('Comments2').textContent = " ";
@@ -295,8 +298,8 @@ export class ItemsComponent implements OnInit {
     {
       document.getElementById('Name2').textContent = "Orange";
       document.getElementById('Image2').src = "https://www.thermofisher.com/blog/wp-content/uploads/2014/11/orange_citrus_fruit_isolated.jpg";
-      document.getElementById('Price2').textContent = this.fruitPrices[2].toString();
-      document.getElementById('Quantity2').textContent = this.fruitStock[2].toString();
+      document.getElementById('Price2').textContent = this.itemsservice.fruitPrices[2].toString();
+      document.getElementById('Quantity2').textContent = this.itemsservice.fruitStock[2].toString();
       document.getElementById('Desc2').textContent = "This is a Orange";
       document.getElementById('Rating2').textContent = ratings[0].toString();
       document.getElementById('Comments2').textContent = " ";
@@ -384,9 +387,9 @@ export class ItemsComponent implements OnInit {
   {
     for(var i = 0; i < 3; i++)
     {
-      var ANewStock = (this.fruitStock[0] - parseInt((<HTMLInputElement>document.getElementById('QuantityInput'+ i.toString())).value));
-      var PNewStock = (this.fruitStock[1] - parseInt((<HTMLInputElement>document.getElementById('QuantityInput'+ i.toString())).value));
-      var ONewStock = (this.fruitStock[2] - parseInt((<HTMLInputElement>document.getElementById('QuantityInput'+ i.toString())).value));
+      var ANewStock = (this.itemsservice.fruitStock[0] - parseInt((<HTMLInputElement>document.getElementById('QuantityInput'+ i.toString())).value));
+      var PNewStock = (this.itemsservice.fruitStock[1] - parseInt((<HTMLInputElement>document.getElementById('QuantityInput'+ i.toString())).value));
+      var ONewStock = (this.itemsservice.fruitStock[2] - parseInt((<HTMLInputElement>document.getElementById('QuantityInput'+ i.toString())).value));
       if(parseInt((<HTMLInputElement>document.getElementById('QuantityInput'+ i.toString())).value) && 
       (parseInt((<HTMLInputElement>document.getElementById('RatingInput'+ i.toString())).value) || 
       ((<HTMLInputElement>document.getElementById('CommentInput'+ i.toString())).value)))
@@ -408,8 +411,8 @@ export class ItemsComponent implements OnInit {
         {
           if(ANewStock >= 0)
           {
-            this.fruitStock[0] -= parseInt((<HTMLInputElement>document.getElementById('QuantityInput'+ i.toString())).value);
-            console.log(this.fruitStock[0]);
+            this.itemsservice.fruitStock[0] -= parseInt((<HTMLInputElement>document.getElementById('QuantityInput'+ i.toString())).value);
+            console.log(this.itemsservice.fruitStock[0]);
             this.postService.postData(data).subscribe((response)=>{
             console.log(response);
             });
@@ -417,15 +420,15 @@ export class ItemsComponent implements OnInit {
           else
           {
             alert("That's over the stock!");
-            console.log(this.fruitStock[0]);
+            console.log(this.itemsservice.fruitStock[0]);
           }
         }
         if((document.getElementById("Name" + i.toString()).textContent) == "Pear")
         {
           if(PNewStock >= 0)
           {
-            this.fruitStock[1] -= parseInt((<HTMLInputElement>document.getElementById('QuantityInput'+ i.toString())).value);
-            console.log(this.fruitStock[1]);
+            this.itemsservice.fruitStock[1] -= parseInt((<HTMLInputElement>document.getElementById('QuantityInput'+ i.toString())).value);
+            console.log(this.itemsservice.fruitStock[1]);
             this.postService.postData(data).subscribe((response)=>{
             console.log(response);
             });
@@ -439,8 +442,8 @@ export class ItemsComponent implements OnInit {
         {
           if(ONewStock >= 0)
           {
-            this.fruitStock[2] -= parseInt((<HTMLInputElement>document.getElementById('QuantityInput'+ i.toString())).value);
-            console.log(this.fruitStock[2]);
+            this.itemsservice.fruitStock[2] -= parseInt((<HTMLInputElement>document.getElementById('QuantityInput'+ i.toString())).value);
+            console.log(this.itemsservice.fruitStock[2]);
             this.postService.postData(data).subscribe((response)=>{
             console.log(response);
             });

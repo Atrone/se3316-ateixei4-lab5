@@ -9,10 +9,10 @@ export class PutService {
 
   constructor(private http: HttpClient) { }
   
-  updateItem(id : String)
+  updateItem(id : String, data)
   {
     console.log("OMG HEY");
-    //return this.http.put
+    return this.http.put('/api/items/' + id, data);
   }
   
 }

@@ -1,4 +1,17 @@
 <script type='text/typescript' src='cart.component.ts'> </script>
+<h1>Shopping Cart:</h1>
+<li><p id = "appleCart"></p>
+        <button (click)="addApple()">+</button><button (click)="subApple()">-</button>
+        <button (click)="deleteApples()">Delete</button>
+    </li>
+    <li><p id = "pearCart"></p>
+        <button (click)="addPear()">+</button><button (click)="subPear()">-</button>
+        <button (click)="deletePears()">Delete</button>
+    </li>
+    <li><p id = "orangeCart"></p>
+        <button (click)="addOrange()">+</button><button (click)="subOrange()">-</button>
+        <button (click)="deleteOranges()">Delete</button>
+    </li>
 <p id = "totals"></p>
 <button (click)="buyAll()">Buy your orders</button>
 <button (click)="removeAll()">Cancel your orders</button>

@@ -15,7 +15,7 @@ constructor(private http: HttpClient) { }
   */
   getData(callback_fun) {
       this.http.get('/api/items').subscribe(data => {
-          console.log(data[1]['name']);
+          //console.log(data[1]['name']);
           callback_fun(data);
       });
   }
