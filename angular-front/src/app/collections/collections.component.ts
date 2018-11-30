@@ -16,7 +16,7 @@ export class CollectionsComponent implements OnInit {
   SM:boolean = false;
   // creates instances of PostService, GetService, and PutService
   constructor(private postService: PostService, private getService: GetService
-  , private putService : PutService) { 
+  , public putservice : PutService) { 
   }
   ngOnInit() {
   }
@@ -34,25 +34,37 @@ export class CollectionsComponent implements OnInit {
   // logic to change a collection's visibility
   CVLogic(res:string)
   {
-    if(document.getElementById('changeVisibilityBtn').textContent == "Privatize")
+    document.getElementById('changeVisibilityBtn').textContent = "Publicize";
+    for(var i = 0; i < res.length; i++)
     {
-      document.getElementById('changeVisibilityBtn').textContent = "Publicize";
-      for(var i = 0; i < res.length; i++)
+      if(res[i]['coll'] == document.getElementById('title').value)
       {
-        console.log(res[i]['coll']);
-        console.log(document.getElementById('title').value);
-        if(res[i]['coll'] == document.getElementById('title').value)
-        {
-          console.log("we made it");
-          this.putService.updateItem("hey");
-          res[i]['pub'] = true;
-        }
+        console.log(res[i]['name']);
+        console.log("we made it");
+        this.CVPut(res[i]);
       }
     }
-    else
-    {
-      document.getElementById('changeVisibilityBtn').textContent = "Privatize";
-    }
+  }
+  
+  CVPut(oData)
+  {
+    console.log(oData['pub']);
+      console.log("getting there. ok")
+      var data =
+      {
+        name : oData['name'], 
+        price : oData['price'],
+        quantity : oData['quantity'],
+        rating : oData['rating'],
+        comment : oData['comment'],
+        user : firebase.auth().currentUser.email,
+        desc : "",
+        coll : "",
+        pub : true, 
+      } 
+    console.log(oData['_id'].toString()); 
+    console.log(data);
+    this.putservice.updateItem(oData['_id'].toString(),data).subscribe(data=>console.log(data));
   }
   
   // collections is called on create/edit/see button
@@ -73,34 +85,49 @@ export class CollectionsComponent implements OnInit {
   {
     document.getElementById('collectionName').textContent = "Current Collection: " + document.getElementById('title').value;
     document.getElementById('collectionDescription').textContent = "Description: " + document.getElementById('description0').value;
-    for(var i = res.length+6; i < (2*res.length)+6; i++)
+    for(var i = 0; i < res.length; i++)
     {
       if(document.getElementById(i.toString()) != null)
       {
         this.removeElement(i.toString());
+        this.removeElement((i+1).toString());
+        this.removeElement((i+2).toString());
+        this.removeElement((i+3).toString());
       }
     }
-    for(var i = res.length+6; i < (2*res.length)+6; i++)
+    for(var i = 0; i < res.length; i++)
     {
-      if((res[i-(res.length+6)]['user'] == firebase.auth().currentUser.email) && (res[i-(res.length+6)]['coll'] == document.getElementById('title').value))
+      if((res[i]['user'] == firebase.auth().currentUser.email) && (res[i]['coll'] == document.getElementById('title').value))
       {
-        this.createElement("LI",i.toString(),res[i-(res.length+6)]['name'] + ", " + res[i-(res.length+6)]['desc']);
+        this.createElement("LI",i.toString(),res[i]['name'] + ", " + res[i]['desc'] + ", " + res[i]['quantity'].toString() + ", " + res[i]['user'].toString());
+        this.createElement("BUTTON",(i+1).toString(),"+");
+        this.createElement("BUTTON",(i+2).toString(),"-");
+        this.createElement("BUTTON",(i+3).toString(),"Delete");
       } 
     }
   }
   // show public handles the logic to show the public collections
   showPublic(res : string)
   {
-    for(var i = res.length+6; i < (2*res.length)+6; i++)
+    for(var i = 0; i < res.length; i++)
     {
-      console.log((res[i-(res.length+6)]['coll']));
-      console.log((res[i-(res.length+6)]['pub']));
-      if((res[i-(res.length+6)]['coll']) && (res[i-(res.length+6)]['pub']))
+      console.log((res[i]['coll']));
+      console.log((res[i]['pub']));
+      if((res[i]['coll']) && (res[i]['pub']))
       {
         console.log("whats up?");
-        this.createElement("LI",(i+1).toString(),res[i-(res.length+6)]['name'] + ", " + res[i-(res.length+6)]['desc']);
+        this.createElement("LI",(i+4).toString(),res[i]['name'] + ", " + res[i]['desc']);
       } 
     }
+  }
+  removeItem(event, id) {
+  console.log("BYE" + id);
+  }
+  addItem(event, id) {
+  console.log("BYE" + id);
+  }
+  subItem(event, id) {
+  console.log("BYE" + id);
   }
   
   // creates an html element
@@ -111,6 +138,18 @@ export class CollectionsComponent implements OnInit {
     x.setAttribute('id', elementId);
     x.appendChild(y);
     document.body.appendChild(x);
+    if(html == "Delete")
+    {
+      x.addEventListener("click",this.removeItem.bind(this));
+    }
+    else if(html == "+")
+    {
+      x.addEventListener("click",this.addItem.bind(this,(elementId-1)));
+    }
+    else if(html == "-")
+    {
+      x.addEventListener("click",this.subItem.bind(this));
+    }
   }
   // removes an html element
     removeElement(elementId) {
@@ -124,16 +163,16 @@ export class CollectionsComponent implements OnInit {
   {
     var data ={
           name : document.getElementById('name').value, 
-          price : 0,
-          quantity : 0,
-          rating : 0,
-          comment : "",
+          quantity : 1,
           user : firebase.auth().currentUser.email,
           desc : document.getElementById('description1').value,
           coll : document.getElementById('title').value,
+          comment : "",
+          price : 0, 
+          rating : 0,
           pub : false, 
       }
-    this.postService.postData(data).subscribe((response)=>{
+    this.postService.postData(data).subscribe((response)=>{ 
     console.log(response);
     });
   }

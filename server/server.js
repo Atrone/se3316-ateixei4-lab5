@@ -22,7 +22,7 @@ mongoose.connect('mongodb://atrone:Drt83711!@ds155203.mlab.com:55203/productstut
 
 
 var Item     = require('./models/item.js');
-
+var Wishlist_Item     = require('./models/wishlist_item.js');
 
 // ROUTES FOR OUR API
 // =============================================================================
@@ -155,35 +155,30 @@ router.route('/coll')
     // create a item (accessed at POST URL)
     .post(function(req, res) {
         console.log("hi");
-        var item = new Item();      // create a new instance of the item model
+        var wishlistItem = new Wishlist();      // create a new instance of the item model
         // filter all possible ways to input HTML or Javascript into the app
         if((req.body.name.includes("<")) || (req.body.name.includes(">"))
-        || (req.body.name.includes("&")) || (req.body.comment.includes("<")) || (req.body.comment.includes(">"))
-        || (req.body.comment.includes("&"))|| (req.body.desc.includes("<")) || (req.body.desc.includes(">"))
-        || (req.body.desc.includes("&"))|| (req.body.coll.includes("<")) || (req.body.coll.includes(">"))
-        || (req.body.coll.includes("&")))
+        || (req.body.name.includes("&")) || (req.body.desc.includes("<")) || (req.body.desc.includes(">"))
+        || (req.body.desc.includes("&")))
         {
             console.log("Filter")
         }
         // validates that price and tax are numbers
-        else if((isNaN(req.body.price)) | (isNaN(req.body.quantity)) | (isNaN(req.body.rating)))
+        else if((isNaN(req.body.quantity)))
         {
             console.log("Validation")
         }
         else
         {
             console.log("Getting there");
-            item.name = req.body.name;  // set the items name (comes from the request)
-            item.price = req.body.price;
-            item.quantity = req.body.quantity;
-            item.rating = req.body.rating;
-            item.comment = req.body.comment;
-            item.user = req.body.user;
-            item.coll = req.body.coll;
-            item.desc = req.body.desc;
-            item.pub = req.body.pub;
+            wishlistItem.name = req.body.name;  // set the items name (comes from the request)
+            wishlistItem.price = req.body.price;
+            wishlistItem.quantity = req.body.quantity;
+            wishlistItem.user = req.body.user;
+            wishlistItem.desc = req.body.desc;
+            wishlistItem.pub = req.body.pub;
             // save the item and check for errors
-            item.save(function(err) {
+            wishlistItem.save(function(err) {
                 if (err)
                     res.send(err);
             })
@@ -193,11 +188,11 @@ router.route('/coll')
     })
     // get all the items (accessed at GET URL)
     .get(function(req, res) {
-        Item.find(function(err, items) {
+        Wishlist_Item.find(function(err, Wishlist_Items) {
             if (err)
                 res.send(err);
-            console.log(items)
-            res.json(items);
+            console.log(Wishlist_Items)
+            res.json(Wishlist_Items);
         });
     }
 );
@@ -205,16 +200,16 @@ router.route('/coll/:item_id')
 
     // get the item with that id (accessed at GET URL)
     .get(function(req, res) {
-        Item.findById(req.params.item_id, function(err, item) {
+        Wishlist_Item.findById(req.params.item_id, function(err, wishlist_Item) {
             if (err)
                 res.send(err);
-            res.json(item);
+            res.json(wishlist_Item);
         });
     }) 
     .put(function(req, res) {
 
         // use our item model to find the item we want
-        Item.findById(req.params.item_id, function(err, item) {
+        Wishlist_Item.findById(req.params.item_id, function(err, wishlist_Item) {
             if (err)
             {
                 res.send(err);
@@ -235,12 +230,12 @@ router.route('/coll/:item_id')
             else
             {
             // filter all possible ways to input HTML or Javascript into the app
-                item.name = req.body.name;  // set the items name (comes from the request)
-                item.price = req.body.price;
-                item.tax = req.body.tax;
-                item.quantity = req.body.quantity;
+                wishlist_Item.name = req.body.name;  // set the items name (comes from the request)
+                wishlist_Item.price = req.body.price;
+                wishlist_Item.tax = req.body.tax;
+                wishlist_Item.quantity = req.body.quantity;
                 // save the item
-                item.save(function(err) {
+                wishlist_Item.save(function(err) {
                     if (err)
                         res.send(err);
                 })
@@ -249,9 +244,9 @@ router.route('/coll/:item_id')
     })
     // delete the item with this id (accessed at DELETE URL)
     .delete(function(req, res) {
-        Item.remove({
+        Wishlist_Item.remove({
             _id: req.params.item_id
-        }, function(err, item) {
+        }, function(err, wishlist_Item) {
             if (err)
                 res.send(err);
         })
