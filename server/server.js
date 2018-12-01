@@ -127,10 +127,15 @@ router.route('/items/:item_id')
             else
             {
             // filter all possible ways to input HTML or Javascript into the app
-                item.name = req.body.name;  // set the items name (comes from the request)
-                item.price = req.body.price;
-                item.tax = req.body.tax;
-                item.quantity = req.body.quantity;
+            item.name = req.body.name;  // set the items name (comes from the request)
+            item.price = req.body.price;
+            item.quantity = req.body.quantity;
+            item.rating = req.body.rating;
+            item.comment = req.body.comment;
+            item.user = req.body.user;
+            item.coll = req.body.coll;
+            item.desc = req.body.desc;
+            item.pub = req.body.pub;
                 // save the item
                 item.save(function(err) {
                     if (err)

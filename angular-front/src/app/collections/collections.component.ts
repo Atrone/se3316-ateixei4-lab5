@@ -5,6 +5,7 @@ import {GetService} from '../get.service'
 import { AngularFireAuth } from 'angularfire2/auth';
 import * as firebase from 'firebase/app';
 import {PutService} from '../put.service';
+import {DeleteService} from '../delete.service';
 
 
 @Component({
@@ -14,9 +15,10 @@ import {PutService} from '../put.service';
 })
 export class CollectionsComponent implements OnInit {
   SM:boolean = false;
+  ids:String[] = [""];
   // creates instances of PostService, GetService, and PutService
   constructor(private postService: PostService, private getService: GetService
-  , public putservice : PutService) { 
+  , public putservice : PutService, public deleteservice : DeleteService) { 
   }
   ngOnInit() {
   }
@@ -34,21 +36,29 @@ export class CollectionsComponent implements OnInit {
   // logic to change a collection's visibility
   CVLogic(res:string)
   {
-    document.getElementById('changeVisibilityBtn').textContent = "Publicize";
     for(var i = 0; i < res.length; i++)
     {
       if(res[i]['coll'] == document.getElementById('title').value)
       {
-        console.log(res[i]['name']);
-        console.log("we made it");
         this.CVPut(res[i]);
       }
     }
+    if(document.getElementById('changeVisibilityBtn').textContent == "Privatize")
+    {
+      document.getElementById('changeVisibilityBtn').textContent = "Publicize";
+    }
+    else
+    {
+      document.getElementById('changeVisibilityBtn').textContent = "Privatize";
+    }
   }
   
+  // updates item with new visibility
   CVPut(oData)
   {
     console.log(oData['pub']);
+    if(document.getElementById('changeVisibilityBtn').textContent == "Publicize")
+    {
       console.log("getting there. ok")
       var data =
       {
@@ -58,13 +68,85 @@ export class CollectionsComponent implements OnInit {
         rating : oData['rating'],
         comment : oData['comment'],
         user : firebase.auth().currentUser.email,
-        desc : "",
-        coll : "",
+        desc : document.getElementById('description0').value,
+        coll : document.getElementById('title').value,
         pub : true, 
       } 
+    }
+    else
+    {
+      var data =
+      {
+        name : oData['name'], 
+        price : oData['price'],
+        quantity : oData['quantity'],
+        rating : oData['rating'],
+        comment : oData['comment'],
+        user : firebase.auth().currentUser.email,
+        desc : document.getElementById('description0').value,
+        coll : document.getElementById('title').value,
+        pub : false, 
+      } 
+    }
     console.log(oData['_id'].toString()); 
     console.log(data);
     this.putservice.updateItem(oData['_id'].toString(),data).subscribe(data=>console.log(data));
+  }
+  
+  showAll()
+  {
+    
+  }
+  
+  deleteCollection()
+  {
+    if(confirm("ARE YOU SURE?"))
+    {
+    this.getService.getData(this.deleteCollectionLogic.bind(this));
+    }
+    else{}
+  }
+  deleteCollectionLogic(res:String)
+  {
+    for(var i = 0; i < res.length; i++)
+    {
+      if(res[i]['coll'] == document.getElementById('title').value)
+      {
+        this.deleteservice.deleteItem(res[i]['_id']);
+      }
+    }
+  }
+  
+  renameCollection()
+  {
+    this.getService.getData(this.renameCollectionLogic.bind(this));
+  }
+  renameCollectionLogic(res:String)
+  {
+    for(var i = 0; i < res.length; i++)
+    {
+      console.log(res[i]['coll']);
+      console.log((document.getElementById('collectionName').textContent.split(": ")[1]));
+      if(res[i]['coll'])
+      {
+        if((res[i]['coll']) === (document.getElementById('collectionName').textContent.split(": ")[1]))
+        {
+          var data =
+          {
+            name : res[i]['name'], 
+            price : res[i]['price'],
+            quantity : res[i]['quantity'],
+            rating : res[i]['rating'],
+            comment : res[i]['comment'],
+            user : firebase.auth().currentUser.email,
+            desc : document.getElementById('description0').value,
+            coll : document.getElementById('title').value,
+            pub : res[i]['pub'], 
+          } 
+          this.putservice.updateItem(res[i]['_id'].toString(),data).subscribe(data=>console.log(data));
+        }
+      }
+    }
   }
   
   // collections is called on create/edit/see button
@@ -83,6 +165,7 @@ export class CollectionsComponent implements OnInit {
   // show collection handles the HTML logic to show the collection
   showCollection(res : String)
   {
+    this.ids = [""];
     document.getElementById('collectionName').textContent = "Current Collection: " + document.getElementById('title').value;
     document.getElementById('collectionDescription').textContent = "Description: " + document.getElementById('description0').value;
     for(var i = 0; i < res.length; i++)
@@ -93,6 +176,9 @@ export class CollectionsComponent implements OnInit {
         this.removeElement((i+1).toString());
         this.removeElement((i+2).toString());
         this.removeElement((i+3).toString());
+        this.removeElement((i+4).toString());
+        this.removeElement((i+5).toString());
+
       }
     }
     for(var i = 0; i < res.length; i++)
@@ -100,9 +186,9 @@ export class CollectionsComponent implements OnInit {
       if((res[i]['user'] == firebase.auth().currentUser.email) && (res[i]['coll'] == document.getElementById('title').value))
       {
         this.createElement("LI",i.toString(),res[i]['name'] + ", " + res[i]['desc'] + ", " + res[i]['quantity'].toString() + ", " + res[i]['user'].toString());
-        this.createElement("BUTTON",(i+1).toString(),"+");
-        this.createElement("BUTTON",(i+2).toString(),"-");
-        this.createElement("BUTTON",(i+3).toString(),"Delete");
+        this.createElement("BUTTON",(i+1).toString(),"+",res[i]['_id']);
+        this.createElement("BUTTON",(i+2).toString(),"-",res[i]['_id']);
+        this.createElement("BUTTON",(i+3).toString(),"Delete",res[i]['_id']);
       } 
     }
   }
@@ -116,40 +202,44 @@ export class CollectionsComponent implements OnInit {
       if((res[i]['coll']) && (res[i]['pub']))
       {
         console.log("whats up?");
-        this.createElement("LI",(i+4).toString(),res[i]['name'] + ", " + res[i]['desc']);
+        this.createElement("H3",(i+5).toString(),res[i]['coll'] + ":");
+        this.createElement("LI",(i+4).toString(),res[i]['name'] + ", " + res[i]['desc'] + ", " + res[i]['quantity'].toString() + ", " + res[i]['user'].toString());
       } 
     }
   }
-  removeItem(event, id) {
+  // functions to remove, add quantity, and subtract quantity, shown
+  removeItem(event) {
   console.log("BYE" + id);
   }
-  addItem(event, id) {
+  addItem(event) {
   console.log("BYE" + id);
   }
-  subItem(event, id) {
+  subItem(event) {
   console.log("BYE" + id);
   }
   
   // creates an html element
-  createElement(element,elementId,html)
+  createElement(element,elementId,html,mLabID)
   {
     let x = document.createElement(element);
     let y = document.createTextNode(html);
     x.setAttribute('id', elementId);
     x.appendChild(y);
     document.body.appendChild(x);
+    this.ids.push(mLabID);
     if(html == "Delete")
     {
       x.addEventListener("click",this.removeItem.bind(this));
     }
     else if(html == "+")
     {
-      x.addEventListener("click",this.addItem.bind(this,(elementId-1)));
+      x.addEventListener("click",this.addItem.bind(this);
     }
     else if(html == "-")
     {
-      x.addEventListener("click",this.subItem.bind(this));
+      x.addEventListener("click",this.subItem.bind(this);
     }
+    console.log(this.ids);
   }
   // removes an html element
     removeElement(elementId) {
@@ -176,6 +266,4 @@ export class CollectionsComponent implements OnInit {
     console.log(response);
     });
   }
-  
-
 }
