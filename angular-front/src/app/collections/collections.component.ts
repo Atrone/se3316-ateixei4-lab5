@@ -18,9 +18,36 @@ export class CollectionsComponent implements OnInit {
   ids:String[] = [""];
   // creates instances of PostService, GetService, and PutService
   constructor(private postService: PostService, private getService: GetService
-  , public putservice : PutService, public deleteservice : DeleteService) { 
+  , public putservice : PutService, public deleteservice : DeleteService) {
+    setInterval(()=>{
+      this.showAll();
+    },500) 
   }
   ngOnInit() {
+  }
+  
+  showAll()
+  {
+    this.getService.getData(this.showAllLogic.bind(this));
+  }
+  showAllLogic(res:String)
+  {
+    for(var i = 0; i < res.length; i++)
+    {
+      if(document.getElementById(i.toString()) != null)
+      {
+        this.removeElement(i.toString());
+        this.removeElement((i+1).toString());
+      }
+    }
+    for(var i = 0; i < res.length; i++)
+    {
+      if((res[i]['user'] == firebase.auth().currentUser.email) && (res[i]['coll']))
+      {
+        this.createElement("H1",i.toString(),"Collection:" + res[i]['coll']);
+        this.createElement("LI",(i+1).toString(),res[i]['name'] + ", " + res[i]['desc'] + ", " + res[i]['quantity'].toString() + ", " + res[i]['user'].toString());
+      } 
+    }
   }
   
   showMore()
@@ -93,11 +120,6 @@ export class CollectionsComponent implements OnInit {
     this.putservice.updateItem(oData['_id'].toString(),data).subscribe(data=>console.log(data));
   }
   
-  showAll()
-  {
-    
-  }
-  
   deleteCollection()
   {
     if(confirm("ARE YOU SURE?"))
@@ -165,7 +187,6 @@ export class CollectionsComponent implements OnInit {
   // show collection handles the HTML logic to show the collection
   showCollection(res : String)
   {
-    this.ids = [""];
     document.getElementById('collectionName').textContent = "Current Collection: " + document.getElementById('title').value;
     document.getElementById('collectionDescription').textContent = "Description: " + document.getElementById('description0').value;
     for(var i = 0; i < res.length; i++)
@@ -209,7 +230,7 @@ export class CollectionsComponent implements OnInit {
   }
   // functions to remove, add quantity, and subtract quantity, shown
   removeItem(event) {
-  console.log("BYE" + id);
+    console.log("BYE" + id);
   }
   addItem(event) {
   console.log("BYE" + id);
